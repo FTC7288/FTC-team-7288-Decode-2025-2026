@@ -3,9 +3,13 @@ package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
@@ -31,6 +35,7 @@ public class Drive extends SubsystemBase {
         );
     }
 
+
     public void driveFieldCentric(double speedY, double speedX, double rotationX, double botHeading) {
         mecanumDrive.driveFieldCentric(
             speedY, speedX, rotationX, botHeading
@@ -50,6 +55,15 @@ public class Drive extends SubsystemBase {
         imuAngles = robot.imu.getAngularOrientation();
     }
 
+    // TODO: FINISH PLEASE
+    public Pose3D getRobotPose() {
+        Pose3D limelightPose = robot.limelight.getPose(imuAngles.firstAngle);
+
+
+
+
+        return null;
+    }
 
 
 }

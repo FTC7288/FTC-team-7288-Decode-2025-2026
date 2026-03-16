@@ -27,7 +27,7 @@ public class LimeLight extends SubsystemBase {
         robot.limelight3A.updateRobotOrientation(yawAngleDegrees);
         LLResult latestResult = robot.limelight3A.getLatestResult();
         if (latestResult.isValid()) {
-            return latestResult.getBotpose_MT2();
+            return latestResult.getBotpose();
         } else {
             return null;
         }

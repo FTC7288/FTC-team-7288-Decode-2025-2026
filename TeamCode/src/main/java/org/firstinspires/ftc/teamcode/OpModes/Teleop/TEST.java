@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
@@ -9,15 +10,25 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
+import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.CommandBase.Commands.IndexerPositionCommand;
+import org.firstinspires.ftc.teamcode.CommandBase.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
 @TeleOp
 public class TEST extends CommandOpMode {
     Robot robot = Robot.getInstance();
+    CommandScheduler scheduler = CommandScheduler.getInstance();
+
     GamepadEx driver;
+
+    TriggerReader rightTrigger;
+    TriggerReader leftTrigger;
+
+    IndexerPositionCommand indexerPositionCommand = new IndexerPositionCommand();
 
     @Override
     public void initialize() {
@@ -36,16 +47,23 @@ public class TEST extends CommandOpMode {
                         () -> robot.drive.updateBotHeading()
                 ));
 
-        Trigger rightTrigger = new Trigger(
+
+
+
+
+
+        Trigger rightTriggerScheduler = new Trigger(
                 () -> driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > Constants.GamePad.TRIGGER_THRESHOLD);
-        Trigger leftTrigger = new Trigger(
+        Trigger leftTriggerScheduler = new Trigger(
                 () -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > Constants.GamePad.TRIGGER_THRESHOLD);
 
+        rightTrigger = new TriggerReader(driver, GamepadKeys.Trigger.RIGHT_TRIGGER);
+        leftTrigger = new TriggerReader(driver, GamepadKeys.Trigger.LEFT_TRIGGER );
 
-        rightTrigger.whenActive(new InstantCommand(
-                () -> robot.intake.startIntake()
-        ));
 
+        scheduler.schedule(false,
+                indexerPositionCommand
+        );
 
         robot.limelight.start();
     }
@@ -55,15 +73,14 @@ public class TEST extends CommandOpMode {
     @Override
     public void run() {
         robot.drive.updateIMUOrientation();
-
-
-
         robot.drive.driveFieldCentric(
                 driver.getLeftY(),
                 driver.getLeftX(),
                 driver.getRightX(),
                 robot.drive.getBotHeading()
         );
+
+        indexerPositionCommand.interruptMain(leftTrigger.isDown());
 
 
         super.run();

@@ -6,13 +6,16 @@ import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Drive;
+import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.LimeLight;
 
@@ -32,13 +35,18 @@ public class Robot {
 
 //    public DcMotorEx frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor, turretMotor, flywheelTopMotor, flywheelBottomMotor, intakeMotor;
     public MotorEx frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor, turretMotor, flywheelTopMotor, flywheelBottomMotor, intakeMotor;
+    public Motor.Encoder turretEncoder, flywheelEncoder;
+
     public Servo indexerServo, intakeRightServo, intakeLeftServo, led;
     public BNO055IMU imu;
+    public AnalogInput indexerAnalog, intakeAnalog;
+    public DigitalChannel breakBeam;
     public Limelight3A limelight3A;
 
     public Intake intake;
     public Drive drive;
     public LimeLight limelight;
+    public Indexer indexer;
 
 
     // Init hardware bellow
@@ -68,6 +76,9 @@ public class Robot {
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         turretMotor.setInverted(true);
 
+        turretEncoder = turretMotor.encoder;
+        turretEncoder.getCorrectedVelocity();
+
         //Flywheel Motors
         flywheelTopMotor = new MotorEx(hardwareMap, Constants.HardwareNames.FLYWHEEL_TOP);
         flywheelBottomMotor = new MotorEx(hardwareMap, Constants.HardwareNames.FLYWHEEL_BOTTOM);
@@ -76,6 +87,9 @@ public class Robot {
         flywheelBottomMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
         flywheelTopMotor.setInverted(true);
+        flywheelEncoder = flywheelTopMotor.encoder;
+        flywheelEncoder.getCorrectedVelocity();
+
 
         //Intake Motor
         intakeMotor = new MotorEx(hardwareMap, Constants.HardwareNames.INTAKE);
@@ -101,7 +115,11 @@ public class Robot {
 
 
         // Analog Inputs
+        indexerAnalog = hardwareMap.get(AnalogInput.class, "indexerAnalog");
+        intakeAnalog = hardwareMap.get(AnalogInput.class, "intakeAnalog");
 
+        // Digital Inputs
+        breakBeam = hardwareMap.get(DigitalChannel.class, "breakBeam");
 
         // Digital Inputs
 
@@ -111,6 +129,7 @@ public class Robot {
         drive = new Drive();
         intake = new Intake();
         limelight = new LimeLight();
+        indexer = new Indexer();
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
