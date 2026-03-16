@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.gamepad.TriggerReader;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
@@ -20,8 +18,6 @@ import org.firstinspires.ftc.teamcode.Global.Robot;
 public class TEST extends CommandOpMode {
     Robot robot = Robot.getInstance();
     GamepadEx driver;
-
-    MecanumDrive mecanumDrive;
 
     @Override
     public void initialize() {
@@ -46,25 +42,36 @@ public class TEST extends CommandOpMode {
                 () -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > Constants.GamePad.TRIGGER_THRESHOLD);
 
 
-        rightTrigger.whileActiveContinuous(new InstantCommand(
+        rightTrigger.whenActive(new InstantCommand(
                 () -> robot.intake.startIntake()
         ));
 
+
+        robot.limelight.start();
     }
+
+
 
     @Override
     public void run() {
+        robot.drive.updateIMUOrientation();
+
+
+
         robot.drive.driveFieldCentric(
-                -driver.getLeftY(),
+                driver.getLeftY(),
                 driver.getLeftX(),
                 driver.getRightX(),
                 robot.drive.getBotHeading()
         );
 
-        telemetry.addData("Test: ", robot.imu.getAngularOrientation().firstAngle);
-        telemetry.update();
 
         super.run();
+    }
+
+
+    public void end() {
+        robot.limelight.stop();
     }
 
 }

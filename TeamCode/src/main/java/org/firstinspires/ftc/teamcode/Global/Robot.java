@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,6 +14,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Drive;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.LimeLight;
+
+import Util.Photon.PhotonCore;
 
 public class Robot {
 
@@ -34,6 +38,7 @@ public class Robot {
 
     public Intake intake;
     public Drive drive;
+    public LimeLight limelight;
 
 
     // Init hardware bellow
@@ -105,6 +110,10 @@ public class Robot {
 
         drive = new Drive();
         intake = new Intake();
+        limelight = new LimeLight();
+
+        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
     }
 
 

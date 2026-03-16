@@ -5,6 +5,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 
 
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
 import Util.MecanumDrive;
@@ -13,8 +15,12 @@ public class Drive extends SubsystemBase {
     Robot robot = Robot.getInstance();
     MecanumDrive mecanumDrive;
 
+
+
     double botHeading = 0;
     double offsetAngle = 0;
+
+    public Orientation imuAngles;
 
     public Drive() {
         mecanumDrive = new MecanumDrive(
@@ -32,12 +38,18 @@ public class Drive extends SubsystemBase {
     }
 
     public double getBotHeading() {
-        botHeading = robot.imu.getAngularOrientation().firstAngle;
+        botHeading = imuAngles.firstAngle;
         return -botHeading - offsetAngle;
     }
 
     public void updateBotHeading() {
-        offsetAngle = -robot.imu.getAngularOrientation().firstAngle;
+        offsetAngle = -imuAngles.firstAngle;
     }
+
+    public void updateIMUOrientation() {
+        imuAngles = robot.imu.getAngularOrientation();
+    }
+
+
 
 }

@@ -27,6 +27,7 @@ public class Constants {
 
     public final static class HardwareInitialization {
         public final static String IMUParametersJsonFileName = "BNO055IMUCalibration.json";
+        public final static int LIMELIGHT_POLLING_HZ = 100;
 
     }
 
@@ -39,6 +40,16 @@ public class Constants {
         BLUE(1);
 
         private Alliance(int value) {}
+    }
+
+    public enum FlywheelSpeedSelector {
+        OFF,
+        ON
+    }
+
+    public enum TurretPositionSelector {
+        OFF,
+        ON
     }
 
 
