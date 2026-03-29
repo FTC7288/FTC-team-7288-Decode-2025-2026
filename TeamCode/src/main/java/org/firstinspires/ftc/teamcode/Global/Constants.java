@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.Global;
 
 
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PredictiveBrakingCoefficients;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 public class Constants {
 
@@ -23,6 +26,8 @@ public class Constants {
         public final static String IMU = "imu";
 
         public final static String LED = "led";
+
+        public final static String OTOS = "otos";
     }
 
 
@@ -43,6 +48,14 @@ public class Constants {
         public final static double TRANSFER_POSITION = 0.37;
         public final static double INTAKE_POSITION = 0.7;
         public final static double NEUTRAL_POSITION = 0.5;
+
+        public final static double INTAKE_ANALOG_IN = 2;
+
+        public enum INTAKE_POSITIONS {
+            INTAKE,
+            TRANSFER,
+            NEUTRAL
+        }
     }
 
 
@@ -56,8 +69,8 @@ public class Constants {
 
     public final static class FlywheelSubsystem {
         public enum FlywheelSpeedSelector {
-            OFF,
-            ON
+            FLYWHEEL_OFF,
+            FLYWHEEL_ON
         }
     }
 
@@ -67,6 +80,10 @@ public class Constants {
         public final static double FIRST_POSITION = 0.32;
         public final static double SECOND_POSITION = 0.52;
         public final static double THIRD_POSITION = 0.71;
+
+        public static final double FIRST_ANALOG_POSITION = 1.28;
+        public static final double SECOND_ANALOG_POSITION = 1.85;
+        public static final double THIRD_ANALOG_POSITION = 2.38;
 
         public enum IndexerPositionSelector {
             LAUNCH,
@@ -80,6 +97,19 @@ public class Constants {
 
     public final static class GamePad {
         public final static double TRIGGER_THRESHOLD = 0.5;
+    }
+
+    public final static class PedroPathingConstants {
+        public static double ROBOT_MASS_KG = 11.70;
+        public static double LINEAR_SCALAR = .980;
+        public static double ANGULAR_SCALAR = 1.00;
+        public static double FORWARD_VELOCITY = 78.34427;
+        public static double LATERAL_VELOCITY = 61.51394;
+
+        public static PIDFCoefficients HEADING_PIDF_COEFFICIENTS = new PIDFCoefficients(1.85,0,0.11,0.03);
+        public static PIDFCoefficients SECONDARY_HEADING_PIDF_COEFFICIENTS = new PIDFCoefficients(0,0,0,0);
+        public static PredictiveBrakingCoefficients PREDICTIVE_BRAKING_COEFFICIENTS = new PredictiveBrakingCoefficients(0.1,0.1492730968664078,0.0013504773304059629);
+        public static SparkFunOTOS.Pose2D OTOS_OFFSET_POSE = new SparkFunOTOS.Pose2D(-1.38,1.89,Math.PI);
     }
 
 

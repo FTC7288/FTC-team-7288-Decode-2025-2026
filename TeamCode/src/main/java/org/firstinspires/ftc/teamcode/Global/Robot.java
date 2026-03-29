@@ -15,8 +15,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Drive;
+import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Flywheel;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.LED;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.LimeLight;
 
 import Util.Photon.PhotonCore;
@@ -35,9 +37,10 @@ public class Robot {
 
 //    public DcMotorEx frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor, turretMotor, flywheelTopMotor, flywheelBottomMotor, intakeMotor;
     public MotorEx frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor, turretMotor, flywheelTopMotor, flywheelBottomMotor, intakeMotor;
-    public Motor.Encoder turretEncoder, flywheelEncoder;
+//    public Motor.Encoder turretEncoder, flywheelEncoder;
 
-    public Servo indexerServo, intakeRightServo, intakeLeftServo, led;
+
+    public Servo indexerServo, intakeRightServo, intakeLeftServo, ledServo;
     public BNO055IMU imu;
     public AnalogInput indexerAnalog, intakeAnalog;
     public DigitalChannel breakBeam;
@@ -47,6 +50,8 @@ public class Robot {
     public Drive drive;
     public LimeLight limelight;
     public Indexer indexer;
+    public Flywheel flywheel;
+    public LED led;
 
 
     // Init hardware bellow
@@ -76,8 +81,8 @@ public class Robot {
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         turretMotor.setInverted(true);
 
-        turretEncoder = turretMotor.encoder;
-        turretEncoder.getCorrectedVelocity();
+//        turretEncoder = turretMotor.encoder;
+//        turretEncoder.getCorrectedVelocity();
 
         //Flywheel Motors
         flywheelTopMotor = new MotorEx(hardwareMap, Constants.HardwareNames.FLYWHEEL_TOP);
@@ -87,8 +92,10 @@ public class Robot {
         flywheelBottomMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
         flywheelTopMotor.setInverted(true);
-        flywheelEncoder = flywheelTopMotor.encoder;
-        flywheelEncoder.getCorrectedVelocity();
+        flywheelBottomMotor.setInverted(false);
+
+//        flywheelEncoder = flywheelTopMotor.encoder;
+//        flywheelEncoder.getCorrectedVelocity();
 
 
         //Intake Motor
@@ -109,7 +116,7 @@ public class Robot {
         imu.initialize(initializeIMUParameters());
 
         // LED
-        led = hardwareMap.get(Servo.class, Constants.HardwareNames.LED);
+        ledServo = hardwareMap.get(Servo.class, Constants.HardwareNames.LED);
 
         // OTOS
 
@@ -128,11 +135,17 @@ public class Robot {
 
         drive = new Drive();
         intake = new Intake();
-        limelight = new LimeLight();
         indexer = new Indexer();
+        flywheel = new Flywheel();
+        led = new LED();
+
+        limelight = new LimeLight();
+        limelight.start();
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+
+
     }
 
 
