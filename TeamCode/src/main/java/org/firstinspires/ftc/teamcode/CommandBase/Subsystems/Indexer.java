@@ -56,7 +56,7 @@ public class Indexer extends SubsystemBase {
     }
 
 
-
+    // TODO: make sure to fix issue where it skips states when ball get jammed in the indexer to prevent backlogs
     @Override
     public void periodic() {
         switch (indexerPositionSelector) {

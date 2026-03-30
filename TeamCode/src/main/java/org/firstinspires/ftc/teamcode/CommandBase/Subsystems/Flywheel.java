@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.util.InterpLUT;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Constants.FlywheelSubsystem.*;
 import org.firstinspires.ftc.teamcode.Global.Robot;
@@ -16,7 +14,12 @@ public class Flywheel extends SubsystemBase {
     Robot robot = Robot.getInstance();
     private static FlywheelSpeedSelector flywheelSpeedSelector = FlywheelSpeedSelector.FLYWHEEL_OFF;
 
+    private static InterpLUT velocityLUT = new InterpLUT();
     private double desiredFlywheelVelocity = 0.5;
+
+    public Flywheel () {
+        // TODO: Add flywheel velocity LUT when we get the correct values
+    }
 
 
     public void turnFlywheelOn () {
@@ -27,11 +30,11 @@ public class Flywheel extends SubsystemBase {
         flywheelSpeedSelector = FlywheelSpeedSelector.FLYWHEEL_OFF;
     }
 
-//    public boolean isFlywheelAtSpeed() {
-//        return Range.isBetween(robot.flywheelEncoder.getCorrectedVelocity(),
-//                desiredFlywheelVelocity - Constants.HardwareInitialization.FLYWHEEL_ENCODER_TOLERANCE,
-//                desiredFlywheelVelocity + Constants.HardwareInitialization.FLYWHEEL_ENCODER_TOLERANCE);
-//    }
+    public boolean isFlywheelAtSpeed() {
+        return Range.isBetween(robot.flywheelEncoder.getCorrectedVelocity(),
+                desiredFlywheelVelocity - Constants.HardwareInitialization.FLYWHEEL_ENCODER_TOLERANCE,
+                desiredFlywheelVelocity + Constants.HardwareInitialization.FLYWHEEL_ENCODER_TOLERANCE);
+    }
 
     public boolean isFlywheelOn () {
         return flywheelSpeedSelector.equals(FlywheelSpeedSelector.FLYWHEEL_ON);
@@ -48,8 +51,8 @@ public class Flywheel extends SubsystemBase {
     }
 
 
-    // TODO: FINISH PLEASE
-    private double setTargetFlywheelVelocity(Pose3D currentPose) {
+    // TODO: Finish setting up
+    private double setTargetFlywheelVelocity(Pose2D currentPose) {
 
 
 

@@ -11,6 +11,9 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
+import com.bylazar.field.PanelsField;
+import com.bylazar.panels.Panels;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -92,8 +95,11 @@ public class TEST extends CommandOpMode {
         );
 
 
+        telemetry.addData("Current Pose X: ", robot.drive.getRobotPose().getX(DistanceUnit.INCH));
+        telemetry.addData("Current Pose Y: ", robot.drive.getRobotPose().getY(DistanceUnit.INCH));
+
+
         telemetry.addData("Break Beam: ", robot.breakBeam.getState());
-        telemetry.addData("Intake Analog: ", robot.intake.getIntakePosition());
         telemetry.addData("Is FUll: ", robot.indexer.isFull());
         telemetry.update();
 
