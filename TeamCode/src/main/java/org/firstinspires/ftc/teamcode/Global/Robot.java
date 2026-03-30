@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -14,12 +15,15 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Drive;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Flywheel;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.LED;
 import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.CommandBase.Subsystems.Turret;
 
 import Util.Photon.PhotonCore;
 
@@ -37,21 +41,22 @@ public class Robot {
 
 //    public DcMotorEx frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor, turretMotor, flywheelTopMotor, flywheelBottomMotor, intakeMotor;
     public MotorEx frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor, turretMotor, flywheelTopMotor, flywheelBottomMotor, intakeMotor;
-//    public Motor.Encoder turretEncoder, flywheelEncoder;
-
-
+    public Motor.Encoder turretEncoder, flywheelEncoder;
     public Servo indexerServo, intakeRightServo, intakeLeftServo, ledServo;
     public BNO055IMU imu;
     public AnalogInput indexerAnalog, intakeAnalog;
     public DigitalChannel breakBeam;
     public Limelight3A limelight3A;
+    public SparkFunOTOS otos;
 
     public Intake intake;
     public Drive drive;
     public LimeLight limelight;
     public Indexer indexer;
     public Flywheel flywheel;
+    public Turret turret;
     public LED led;
+
 
 
     // Init hardware bellow
@@ -81,8 +86,7 @@ public class Robot {
         turretMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         turretMotor.setInverted(true);
 
-//        turretEncoder = turretMotor.encoder;
-//        turretEncoder.getCorrectedVelocity();
+        turretEncoder = turretMotor.encoder;
 
         //Flywheel Motors
         flywheelTopMotor = new MotorEx(hardwareMap, Constants.HardwareNames.FLYWHEEL_TOP);
@@ -94,8 +98,7 @@ public class Robot {
         flywheelTopMotor.setInverted(true);
         flywheelBottomMotor.setInverted(false);
 
-//        flywheelEncoder = flywheelTopMotor.encoder;
-//        flywheelEncoder.getCorrectedVelocity();
+        flywheelEncoder = flywheelTopMotor.encoder;
 
 
         //Intake Motor
@@ -119,16 +122,26 @@ public class Robot {
         ledServo = hardwareMap.get(Servo.class, Constants.HardwareNames.LED);
 
         // OTOS
+        otos = hardwareMap.get(SparkFunOTOS.class, Constants.HardwareNames.OTOS);
+        otos.setLinearUnit(DistanceUnit.INCH);
+        otos.setAngularUnit(AngleUnit.RADIANS);
+        otos.setLinearScalar(Constants.PedroPathingConstants.LINEAR_SCALAR);
+        otos.setAngularScalar(Constants.PedroPathingConstants.ANGULAR_SCALAR);
+        otos.setOffset(Constants.PedroPathingConstants.OTOS_OFFSET_POSE);
+        otos.setPosition(new SparkFunOTOS.Pose2D(
+                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getX(DistanceUnit.INCH),
+                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getY(DistanceUnit.INCH),
+                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getHeading(AngleUnit.RADIANS))
+        );
+
 
 
         // Analog Inputs
-        indexerAnalog = hardwareMap.get(AnalogInput.class, "indexerAnalog");
-        intakeAnalog = hardwareMap.get(AnalogInput.class, "intakeAnalog");
+        indexerAnalog = hardwareMap.get(AnalogInput.class, Constants.HardwareNames.INDEXER_ANALOG);
+        intakeAnalog = hardwareMap.get(AnalogInput.class, Constants.HardwareNames.INTAKE_ANALOG);
 
         // Digital Inputs
-        breakBeam = hardwareMap.get(DigitalChannel.class, "breakBeam");
-
-        // Digital Inputs
+        breakBeam = hardwareMap.get(DigitalChannel.class, Constants.HardwareNames.BREAK_BEAM);
 
         // LimeLight
         limelight3A = hardwareMap.get(Limelight3A.class, Constants.HardwareNames.LIMELIGHT);
@@ -137,6 +150,8 @@ public class Robot {
         intake = new Intake();
         indexer = new Indexer();
         flywheel = new Flywheel();
+        turret = new Turret();
+
         led = new LED();
 
         limelight = new LimeLight();
