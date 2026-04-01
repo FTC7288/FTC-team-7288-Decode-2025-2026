@@ -40,7 +40,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isIndexerAtPosition(double position) {
-        return Range.isBetween(getIndexerPosition(), position - 0.03, position + 0.03);
+        return Range.isBetween(getIndexerPosition(), position - 0.01, position + 0.01);
     }
 
     public boolean isFull() {

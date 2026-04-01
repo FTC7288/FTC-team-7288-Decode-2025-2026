@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.draw;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -11,40 +14,62 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous
 public class TestAuto extends OpMode {
-    Robot robot = Robot.getInstance();
-    Follower follower;
+    private final Pose startPose = new Pose(72, 72, Math.toRadians(0));
+    private final Pose interPose = new Pose(24 + 72, -24 + 72, Math.toRadians(90));
+    private final Pose endPose = new Pose(24 + 72, 24 + 72, Math.toRadians(45));
 
-    Pose pose2 = new Pose(72, 72, Math.toRadians(45));
-    Pose pose1 = new Pose(123.8, 122.7, Math.toRadians(45));
+    private PathChain triangle;
 
-    Pose ctrl = new Pose(36.5, 71.5);
+    /**
+     * This runs the OpMode, updating the Follower as well as printing out the debug statements to
+     * the Telemetry, as well as the Panels.
+     */
 
-    PathChain testPath;
 
-    private boolean thing = false;
-    @Override
-    public void init() {
-        robot.init(hardwareMap);
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(pose1);
-
-        testPath = follower.pathBuilder()
-                .addPath(new BezierLine(pose1, pose2))
-                .setLinearHeadingInterpolation(pose1.getHeading(), pose2.getHeading())
-                .build();
-    }
 
     @Override
     public void loop() {
         follower.update();
-        if (thing) {
-            follower.followPath(testPath,true);
+        draw();
+
+        if (follower.atParametricEnd()) {
+            follower.followPath(triangle, true);
         }
-        thing = true;
     }
+
+    @Override
+    public void init() {
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(new Pose(72, 72));
+    }
+
+
+    public void init_loop() {
+        follower.update();
+    }
+
+    public void start() {
+        follower.setStartingPose(startPose);
+
+        triangle = follower.pathBuilder()
+                .addPath(new BezierLine(startPose, interPose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), interPose.getHeading())
+                .addPath(new BezierLine(interPose, endPose))
+                .setLinearHeadingInterpolation(interPose.getHeading(), endPose.getHeading())
+                .addPath(new BezierLine(endPose, startPose))
+                .setLinearHeadingInterpolation(endPose.getHeading(), startPose.getHeading())
+                .build();
+
+        follower.followPath(triangle);
+    }
+
+
 }

@@ -36,9 +36,11 @@ public class Constants {
 
     public final static class HardwareInitialization {
         public static Pose2D INITIAL_ROBOT_POSE;
+        public static Pose2D END_ROBOT_POSE;
         public final static String IMUParametersJsonFileName = "BNO055IMUCalibration.json";
         public final static int LIMELIGHT_POLLING_HZ = 100;
         public static final double FLYWHEEL_ENCODER_TOLERANCE = 20;
+
 
         // TODO: Add file reading to give the initial pose from auto
 
@@ -67,7 +69,7 @@ public class Constants {
 
     public final static class TurretSubsystem {
         public static final double TICK_CONSTANT = 2.57;
-        public static PIDFController turretPIDFController = new PIDFController(0.01,0,0,0);
+        public static PIDFController turretPIDFController = new PIDFController(0.004,0,0.0009,0);
         public enum TurretPositionSelector {
             TURRET_OFF,
             TURRET_ON
@@ -76,7 +78,8 @@ public class Constants {
 
 
     public final static class FlywheelSubsystem {
-        public static PIDFController flywheelPIDFCOntroller = new PIDFController(0,0,0,0);
+
+        public static PIDFController flywheelPIDFCOntroller = new PIDFController(0.0015,0,0,0.00051);
         public enum FlywheelSpeedSelector {
             FLYWHEEL_OFF,
             FLYWHEEL_ON
@@ -141,6 +144,9 @@ public class Constants {
     }
 
 
+    public static final class PathNames {
+        public final static String RED_START_SHOOT = "RED_START_SHOOT";
+    }
 
 
 

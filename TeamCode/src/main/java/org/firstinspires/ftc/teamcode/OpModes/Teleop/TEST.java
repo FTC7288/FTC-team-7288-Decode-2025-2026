@@ -45,6 +45,11 @@ public class TEST extends CommandOpMode {
                 new InstantCommand(() -> robot.drive.updateBotHeading())
         );
 
+        Trigger driverLeftBumper = new GamepadButton(driver, GamepadKeys.Button.LEFT_BUMPER);
+        driverLeftBumper.whenActive(
+                new RunCommand(() -> robot.intake.startOuttake(), robot.intake)
+        );
+
 
         Trigger driverAButton = new GamepadButton(driver, GamepadKeys.Button.A);
         driverAButton.whileActiveContinuous(

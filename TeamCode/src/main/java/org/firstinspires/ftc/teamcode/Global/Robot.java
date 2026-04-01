@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Global;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
+import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -57,10 +58,13 @@ public class Robot {
     public Turret turret;
     public LED led;
 
+    public Follower follower;
 
 
     // Init hardware bellow
     public void init(HardwareMap hardwareMap) {
+        follower = org.firstinspires.ftc.teamcode.pedroPathing.Constants.createFollower(hardwareMap);
+
         // Drive Motors
         frontLeftMotor = new MotorEx(hardwareMap, Constants.HardwareNames.DRIVE_MOTORS[0]);
         frontRightMotor = new MotorEx(hardwareMap, Constants.HardwareNames.DRIVE_MOTORS[1]);
@@ -128,11 +132,11 @@ public class Robot {
         otos.setLinearScalar(Constants.PedroPathingConstants.LINEAR_SCALAR);
         otos.setAngularScalar(Constants.PedroPathingConstants.ANGULAR_SCALAR);
         otos.setOffset(Constants.PedroPathingConstants.OTOS_OFFSET_POSE);
-        otos.setPosition(new SparkFunOTOS.Pose2D(
-                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getX(DistanceUnit.INCH),
-                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getY(DistanceUnit.INCH),
-                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getHeading(AngleUnit.RADIANS))
-        );
+//        otos.setPosition(new SparkFunOTOS.Pose2D(
+//                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getX(DistanceUnit.INCH),
+//                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getY(DistanceUnit.INCH),
+//                Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getHeading(AngleUnit.RADIANS))
+//        );
 
 
 
@@ -157,10 +161,10 @@ public class Robot {
         limelight = new LimeLight();
         limelight.start();
 
+//        follower = org.firstinspires.ftc.teamcode.pedroPathing.Constants.createFollower(hardwareMap);
+
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-
-
     }
 
 
