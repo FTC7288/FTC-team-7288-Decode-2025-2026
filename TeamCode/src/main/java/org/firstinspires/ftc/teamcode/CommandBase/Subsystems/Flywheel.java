@@ -1,37 +1,34 @@
 package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.util.InterpLUT;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Global.Constants;
+import org.firstinspires.ftc.teamcode.Global.Constants.FlywheelSubsystem.*;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
 import Util.Range;
 
 public class Flywheel extends SubsystemBase {
     Robot robot = Robot.getInstance();
-    Constants.FlywheelSubsystem.FlywheelSpeedSelector flywheelSpeedSelector = Constants.FlywheelSubsystem.FlywheelSpeedSelector.OFF;
+    private static FlywheelSpeedSelector flywheelSpeedSelector = FlywheelSpeedSelector.FLYWHEEL_OFF;
 
-    private double desiredFlywheelVelocity;
+    private static InterpLUT velocityLUT = new InterpLUT();
+    private double desiredFlywheelVelocity = 0.5;
 
-
-
-    @Override
-    public void periodic() {
-        desiredFlywheelVelocity = setTargetFlywheelVelocity();
-
-        switch (flywheelSpeedSelector) {
-            case ON:
-                setFlywheelVelocity(desiredFlywheelVelocity);
-            case OFF:
-                setFlywheelVelocityZero();
-        }
+    public Flywheel () {
+        // TODO: Add flywheel velocity LUT when we get the correct values
     }
 
-    public void turnFlywheelOn () {flywheelSpeedSelector = Constants.FlywheelSubsystem.FlywheelSpeedSelector.ON;}
 
-    public void turnFlywheelOff() {flywheelSpeedSelector = Constants.FlywheelSubsystem.FlywheelSpeedSelector.OFF;}
+    public void turnFlywheelOn () {
+        flywheelSpeedSelector = FlywheelSpeedSelector.FLYWHEEL_ON;
+    }
+
+    public void turnFlywheelOff() {
+        flywheelSpeedSelector = FlywheelSpeedSelector.FLYWHEEL_OFF;
+    }
 
     public boolean isFlywheelAtSpeed() {
         return Range.isBetween(robot.flywheelEncoder.getCorrectedVelocity(),
@@ -40,7 +37,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     public boolean isFlywheelOn () {
-        return flywheelSpeedSelector.equals(Constants.FlywheelSubsystem.FlywheelSpeedSelector.ON);
+        return flywheelSpeedSelector.equals(FlywheelSpeedSelector.FLYWHEEL_ON);
     }
 
     public void setFlywheelVelocity(double velocity) {
@@ -54,8 +51,8 @@ public class Flywheel extends SubsystemBase {
     }
 
 
-    // TODO: FINISH PLEASE
-    private double setTargetFlywheelVelocity(Pose3D currentPose) {
+    // TODO: Finish setting up
+    private double setTargetFlywheelVelocity(Pose2D currentPose) {
 
 
 
@@ -65,6 +62,17 @@ public class Flywheel extends SubsystemBase {
         return 0;
     }
 
+    @Override
+    public void periodic() {
+        switch (flywheelSpeedSelector) {
+            case FLYWHEEL_ON:
+                setFlywheelVelocity(1);
+                break;
+            case FLYWHEEL_OFF:
+                setFlywheelVelocityZero();
+                break;
+        }
+    }
 
 
 }

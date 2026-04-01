@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 
 
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.pedropathing.geometry.Pose;
+
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
 import Util.MecanumDrive;
@@ -21,10 +22,9 @@ public class Drive extends SubsystemBase {
 
 
 
-    double botHeading = 0;
-    double offsetAngle = 0;
+    private double offsetAngle = 0;
 
-    public Orientation imuAngles;
+    private Orientation imuAngles;
 
     public Drive() {
         mecanumDrive = new MecanumDrive(
@@ -43,7 +43,7 @@ public class Drive extends SubsystemBase {
     }
 
     public double getBotHeading() {
-        botHeading = imuAngles.firstAngle;
+        double botHeading = imuAngles.firstAngle;
         return -botHeading - offsetAngle;
     }
 
@@ -51,18 +51,21 @@ public class Drive extends SubsystemBase {
         offsetAngle = -imuAngles.firstAngle;
     }
 
+    public double getIMUOrientation() {
+        return imuAngles.firstAngle;
+    }
+
     public void updateIMUOrientation() {
         imuAngles = robot.imu.getAngularOrientation();
     }
 
-    // TODO: FINISH PLEASE
-    public Pose3D getRobotPose() {
+    // TODO: Add Kalman filtering for MegaTag 2 pose and add on the velocity or acceleration feedforward not sure which one it needs to be tested
+    public Pose2D getRobotPose() {
         Pose3D limelightPose = robot.limelight.getPose(imuAngles.firstAngle);
+        SparkFunOTOS.Pose2D otosPose = robot.otos.getPosition();
+        SparkFunOTOS.Pose2D otosVelocity = robot.otos.getVelocity();
 
-
-
-
-        return null;
+        return new Pose2D(DistanceUnit.INCH, otosPose.x, otosPose.y, AngleUnit.RADIANS, otosPose.h);
     }
 
 
