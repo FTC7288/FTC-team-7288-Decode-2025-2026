@@ -59,7 +59,9 @@ public class Drive extends SubsystemBase {
         imuAngles = robot.imu.getAngularOrientation();
     }
 
-    // TODO: Add Kalman filtering for MegaTag 2 pose and add on the velocity or acceleration feedforward not sure which one it needs to be tested
+    // TODO: Add Kalman filtering for MegaTag 2 pose and add on the velocity or acceleration feedforward to the pose for on the move shooting (not sure which one it needs to be tested)
+
+
     public Pose2D getRobotPose() {
         Pose3D limelightPose = robot.limelight.getPose(imuAngles.firstAngle);
         SparkFunOTOS.Pose2D otosPose = robot.otos.getPosition();

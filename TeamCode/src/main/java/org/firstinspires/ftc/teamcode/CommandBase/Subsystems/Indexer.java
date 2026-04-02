@@ -57,6 +57,7 @@ public class Indexer extends SubsystemBase {
 
 
     // TODO: make sure to fix issue where it skips states when ball get jammed in the indexer to prevent backlogs
+    // It might be caused by the servo getting the correct voltage but not being at the right position at the time
     @Override
     public void periodic() {
         switch (indexerPositionSelector) {

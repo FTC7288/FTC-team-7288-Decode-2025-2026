@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
 
-// TODO: make sure that this is working properly for doing auto commands
+
 
 public class FollowPath extends CommandBase {
     Follower follower;

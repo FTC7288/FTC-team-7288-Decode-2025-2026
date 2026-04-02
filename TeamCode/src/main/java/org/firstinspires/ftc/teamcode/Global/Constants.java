@@ -42,7 +42,7 @@ public class Constants {
         public static final double FLYWHEEL_ENCODER_TOLERANCE = 20;
 
 
-        // TODO: Add file reading to give the initial pose from auto
+        // TODO: Add file reading to give the initial pose from auto or see if using a static non final variable works better
 
 
     }

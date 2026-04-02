@@ -18,7 +18,7 @@ public class Flywheel extends SubsystemBase {
     private double desiredFlywheelVelocity = 0.5;
 
     public Flywheel () {
-        // TODO: Add flywheel velocity LUT when we get the correct values
+        // TODO: Add flywheel velocity LUT when we get the correct values (requires the big T)
     }
 
 
