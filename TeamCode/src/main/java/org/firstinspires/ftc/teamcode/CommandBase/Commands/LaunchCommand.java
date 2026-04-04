@@ -7,17 +7,17 @@ import org.firstinspires.ftc.teamcode.Global.Robot;
 public class LaunchCommand extends CommandBase {
     Robot robot = Robot.getInstance();
 
+
     @Override
     public void execute() {
         robot.intake.setIntakeStateTransfer();
         robot.indexer.interruptForLaunch(true);
     }
 
-
+    @Override
     public boolean isFinished() {
         return true;
     }
 
-
-
 }
+

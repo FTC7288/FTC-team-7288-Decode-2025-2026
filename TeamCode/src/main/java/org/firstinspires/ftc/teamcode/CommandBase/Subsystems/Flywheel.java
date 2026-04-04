@@ -66,7 +66,8 @@ public class Flywheel extends SubsystemBase {
     public void periodic() {
         switch (flywheelSpeedSelector) {
             case FLYWHEEL_ON:
-                setFlywheelVelocity(1);
+                // TODO: remove this temp setup for the pidf controller
+                setFlywheelVelocity(0.5);
                 break;
             case FLYWHEEL_OFF:
                 setFlywheelVelocityZero();

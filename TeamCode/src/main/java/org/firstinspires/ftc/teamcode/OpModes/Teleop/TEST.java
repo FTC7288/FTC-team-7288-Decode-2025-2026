@@ -30,8 +30,7 @@ public class TEST extends CommandOpMode {
 
     @Override
     public void initialize() {
-        CommandScheduler.getInstance().reset();
-        CommandScheduler.getInstance();
+        super.reset();
 
         Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
         Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH,1,1, AngleUnit.RADIANS,0);
@@ -46,16 +45,16 @@ public class TEST extends CommandOpMode {
         );
 
         Trigger driverLeftBumper = new GamepadButton(driver, GamepadKeys.Button.LEFT_BUMPER);
-        driverLeftBumper.whenActive(
+        driverLeftBumper.whileActiveContinuous(
                 new RunCommand(() -> robot.intake.startOuttake(), robot.intake)
         );
 
 
-        Trigger driverAButton = new GamepadButton(driver, GamepadKeys.Button.A);
+        Trigger driverAButton = new GamepadButton(driver, GamepadKeys.Button.B);
         driverAButton.whileActiveContinuous(
                 new LaunchCommand()
         ).whenInactive(
-                new InstantCommand(() -> robot.indexer.interruptForLaunch(false))
+                new InstantCommand(() -> robot.indexer.interruptForLaunch(false), robot.indexer)
         );
 
 
@@ -90,6 +89,8 @@ public class TEST extends CommandOpMode {
 
     @Override
     public void run() {
+
+
         robot.drive.updateIMUOrientation();
         robot.drive.driveFieldCentric(
                 driver.getLeftY(),
@@ -99,15 +100,18 @@ public class TEST extends CommandOpMode {
         );
 
 
+        telemetry.addData("State: ", robot.indexer.indexerPositionSelector);
+        telemetry.addData("Indexer Position: ", robot.indexer.getIndexerPosition());
+
         telemetry.addData("Current Pose X: ", robot.drive.getRobotPose().getX(DistanceUnit.INCH));
         telemetry.addData("Current Pose Y: ", robot.drive.getRobotPose().getY(DistanceUnit.INCH));
 
 
         telemetry.addData("Break Beam: ", robot.breakBeam.getState());
         telemetry.addData("Is FUll: ", robot.indexer.isFull());
-        telemetry.update();
 
-        CommandScheduler.getInstance().run();
+        telemetry.update();
+        super.run();
     }
 
 

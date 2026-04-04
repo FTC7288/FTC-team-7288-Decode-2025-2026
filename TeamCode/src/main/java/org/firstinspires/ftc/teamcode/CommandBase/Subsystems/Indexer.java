@@ -13,7 +13,7 @@ import Util.Range;
 
 public class Indexer extends SubsystemBase {
     Robot robot = Robot.getInstance();
-    private IndexerPositionSelector indexerPositionSelector = IndexerPositionSelector.FIRST;
+    public IndexerPositionSelector indexerPositionSelector = IndexerPositionSelector.FIRST;
     private boolean interruptedForLaunch = false;
 
 
@@ -40,7 +40,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isIndexerAtPosition(double position) {
-        return Range.isBetween(getIndexerPosition(), position - 0.01, position + 0.01);
+        return Range.isBetween(getIndexerPosition(), position - 0.05, position + 0.05);
     }
 
     public boolean isFull() {
