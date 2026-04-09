@@ -23,11 +23,11 @@ public class LimeLight extends SubsystemBase {
     }
 
 
-    public Pose3D getPose(double yawAngleDegrees) {
-        robot.limelight3A.updateRobotOrientation(yawAngleDegrees);
+    // TODO: Add translation matrix and this to be a Pose2D object rather than a Pose3D object
+    public Pose3D getPose() {
         LLResult latestResult = robot.limelight3A.getLatestResult();
         if (latestResult.isValid()) {
-            return latestResult.getBotpose_MT2();
+            return latestResult.getBotpose();
         } else {
             return null;
         }

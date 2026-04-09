@@ -40,7 +40,9 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean isIndexerAtPosition(double position) {
-        return Range.isBetween(getIndexerPosition(), position - 0.05, position + 0.05);
+        double compensation = (robot.intake.isIntakeOut())? 0.15 : .0;
+        double currentPosition = getIndexerPosition() - compensation;
+        return Range.isBetween(currentPosition, position - 0.05, position + 0.05);
     }
 
     public boolean isFull() {
@@ -60,48 +62,51 @@ public class Indexer extends SubsystemBase {
     // It might be caused by the servo getting the correct voltage but not being at the right position at the time
     @Override
     public void periodic() {
+        if (interruptedForLaunch) indexerPositionSelector = LAUNCH;
         switch (indexerPositionSelector) {
             case LAUNCH:
+                if(robot.intake.isIntakeIn()) {
+                    setLaunchPosition();
+                }
                 if (!interruptedForLaunch) {
                     indexerPositionSelector = FIRST;
-                }
-                if (robot.intake.isIntakeIn()) {
-                    setLaunchPosition();
                 }
                 break;
             case FIRST:
                 setFirstPosition();
-                if (interruptedForLaunch) {
-                    indexerPositionSelector = LAUNCH;
+                if (isIndexerAtPosition(FIRST_ANALOG_POSITION)) {
+                    if (isBeamBroken()) {
+                        indexerPositionSelector = FIRST_TEMP;
+                    }
                 }
-                if (isBeamBroken() && isIndexerAtPosition(FIRST_ANALOG_POSITION)) {
+                break;
+            case FIRST_TEMP:
+                setSecondPosition();
+                if (!isBeamBroken()) {
                     indexerPositionSelector = SECOND;
                 }
                 break;
-
             case SECOND:
-                setSecondPosition();
-                if (interruptedForLaunch) {
-                    indexerPositionSelector = LAUNCH;
+                if (isIndexerAtPosition(SECOND_ANALOG_POSITION)) {
+                    if (isBeamBroken()) {
+                        indexerPositionSelector = SECOND_TEMP;
+                    }
                 }
-                if (isBeamBroken() && isIndexerAtPosition(SECOND_ANALOG_POSITION)) {
+                break;
+            case SECOND_TEMP:
+                setThirdPosition();
+                if (!isBeamBroken()) {
                     indexerPositionSelector = THIRD;
                 }
                 break;
-
             case THIRD:
-                setThirdPosition();
-                if (interruptedForLaunch) {
-                    indexerPositionSelector = LAUNCH;
-                }
-                if (isBeamBroken() && isIndexerAtPosition(THIRD_ANALOG_POSITION)) {
-                    indexerPositionSelector = FULL;
+                if (isIndexerAtPosition(THIRD_ANALOG_POSITION)) {
+                    if (isBeamBroken()) {
+                        indexerPositionSelector = FULL;
+                    }
                 }
                 break;
             case FULL:
-                if (interruptedForLaunch) {
-                    indexerPositionSelector = LAUNCH;
-                }
                 break;
         }
     }

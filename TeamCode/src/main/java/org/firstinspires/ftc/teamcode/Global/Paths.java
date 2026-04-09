@@ -28,23 +28,23 @@ public class Paths {
      */
     public void generatePaths(Follower follower) {
         PathChain RED_START_SHOOT_PATH = follower.pathBuilder()
-                .addPath(new BezierLine(Poses.RED_START_POSE_FRONT, Poses.shootPose))
-                .setLinearHeadingInterpolation(Poses.RED_START_POSE_FRONT.getHeading(), Poses.shootPose.getHeading())
+                .addPath(new BezierLine(Poses.RED_FRONT_START_POSE, Poses.RED_FRONT_SHOOT_POSE))
+                .setLinearHeadingInterpolation(Poses.RED_FRONT_START_POSE.getHeading(), Poses.RED_FRONT_SHOOT_POSE.getHeading())
                 .build();
 
         PathChain RED_SHOOT_bPICKUP_ONE_PATH = follower.pathBuilder()
-                        .addPath(new BezierLine(Poses.shootPose, Poses.pickupPoseOnePre))
-                        .setLinearHeadingInterpolation(Poses.shootPose.getHeading(), Poses.pickupPoseOnePre.getHeading())
+                        .addPath(new BezierLine(Poses.RED_FRONT_SHOOT_POSE, Poses.RED_FRONT_FIRST_sPICKUP_POSE))
+                        .setLinearHeadingInterpolation(Poses.RED_FRONT_SHOOT_POSE.getHeading(), Poses.RED_FRONT_FIRST_sPICKUP_POSE.getHeading())
                         .build();
 
         PathChain RED_bPICKUP_aPICKUP_ONE_PATH = follower.pathBuilder()
-                .addPath(new BezierLine(Poses.pickupPoseOnePre, Poses.pickupPoseOnePost))
-                .setLinearHeadingInterpolation(Poses.pickupPoseOnePre.getHeading(), Poses.pickupPoseOnePost.getHeading())
+                .addPath(new BezierLine(Poses.RED_FRONT_FIRST_sPICKUP_POSE, Poses.RED_FRONT_FIRST_ePICKUP_POSE))
+                    .setLinearHeadingInterpolation(Poses.RED_FRONT_FIRST_sPICKUP_POSE.getHeading(), Poses.RED_FRONT_FIRST_ePICKUP_POSE.getHeading())
                 .build();
 
         PathChain RED_aPICKUP_SHOOT_PATH = follower.pathBuilder()
-                .addPath(new BezierLine(Poses.pickupPoseOnePost, Poses.shootPose))
-                .setLinearHeadingInterpolation(Poses.pickupPoseOnePost.getHeading(), Poses.shootPose.getHeading())
+                .addPath(new BezierLine(Poses.RED_FRONT_FIRST_ePICKUP_POSE, Poses.RED_FRONT_SHOOT_POSE))
+                .setLinearHeadingInterpolation(Poses.RED_FRONT_FIRST_ePICKUP_POSE.getHeading(), Poses.RED_FRONT_SHOOT_POSE.getHeading())
                 .build();
 
 

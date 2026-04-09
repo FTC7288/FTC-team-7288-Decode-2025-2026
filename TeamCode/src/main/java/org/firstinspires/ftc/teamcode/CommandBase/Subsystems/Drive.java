@@ -63,7 +63,7 @@ public class Drive extends SubsystemBase {
 
 
     public Pose2D getRobotPose() {
-        Pose3D limelightPose = robot.limelight.getPose(imuAngles.firstAngle);
+        Pose3D limelightPose = robot.limelight.getPose();
         SparkFunOTOS.Pose2D otosPose = robot.otos.getPosition();
         SparkFunOTOS.Pose2D otosVelocity = robot.otos.getVelocity();
 

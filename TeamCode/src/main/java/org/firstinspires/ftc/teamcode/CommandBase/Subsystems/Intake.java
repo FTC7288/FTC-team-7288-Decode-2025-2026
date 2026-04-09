@@ -10,9 +10,13 @@ import Util.Range;
 
 public class Intake extends SubsystemBase {
    Robot robot = Robot.getInstance();
-   private boolean transferInterrupt = false;
 
-    private static Constants.IntakeSubsystem.INTAKE_POSITIONS intake = Constants.IntakeSubsystem.INTAKE_POSITIONS.NEUTRAL;
+    public Constants.IntakeSubsystem.INTAKE_POSITIONS intakePositionSelector = Constants.IntakeSubsystem.INTAKE_POSITIONS.NEUTRAL;
+    public Constants.IntakeSubsystem.INTAKE_POSITIONS previousIntakePosition = null;
+
+    public double getIntakePosition() {
+        return robot.intakeAnalog.getVoltage();
+    }
 
     public void startIntake() {
         robot.intakeMotor.set(Constants.IntakeSubsystem.INTAKE_SPEED);
@@ -28,14 +32,13 @@ public class Intake extends SubsystemBase {
 
 
     public void setIntakeStateIntake() {
-        intake = Constants.IntakeSubsystem.INTAKE_POSITIONS.INTAKE;
+        intakePositionSelector  = Constants.IntakeSubsystem.INTAKE_POSITIONS.INTAKE;
     }
     public void setIntakeStateTransfer() {
-        intake = Constants.IntakeSubsystem.INTAKE_POSITIONS.TRANSFER;
-        transferInterrupt = true;
+        intakePositionSelector  = Constants.IntakeSubsystem.INTAKE_POSITIONS.TRANSFER;
     }
     public void setIntakeStateNeutral() {
-        intake = Constants.IntakeSubsystem.INTAKE_POSITIONS.NEUTRAL;
+        intakePositionSelector  = Constants.IntakeSubsystem.INTAKE_POSITIONS.NEUTRAL;
     }
 
 
@@ -55,16 +58,18 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean isIntakeIn() {
-        return robot.intakeAnalog.getVoltage() > Constants.IntakeSubsystem.INTAKE_ANALOG_IN;
+        return getIntakePosition() > Constants.IntakeSubsystem.INTAKE_ANALOG_IN;
     }
 
-    public double getIntakePosition() {
-        return robot.intakeAnalog.getVoltage();
+    public boolean isIntakeOut() {
+        return intakePositionSelector == Constants.IntakeSubsystem.INTAKE_POSITIONS.INTAKE;
     }
+
 
     @Override
     public void periodic () {
-        switch (intake) {
+
+        switch (intakePositionSelector ) {
             case INTAKE:
                 setIntakeIntake();
                 startIntake();
@@ -78,6 +83,7 @@ public class Intake extends SubsystemBase {
                 startIntake();
                 break;
         }
+
     }
 
 }

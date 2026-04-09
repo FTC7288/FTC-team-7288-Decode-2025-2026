@@ -57,7 +57,7 @@ public class Constants {
         public final static double INTAKE_POSITION = 0.7;
         public final static double NEUTRAL_POSITION = 0.5;
 
-        public final static double INTAKE_ANALOG_IN = 2;
+        public final static double INTAKE_ANALOG_IN = 2.1;
 
         public enum INTAKE_POSITIONS {
             INTAKE,
@@ -100,9 +100,29 @@ public class Constants {
         public enum IndexerPositionSelector {
             LAUNCH,
             FIRST,
+            FIRST_TEMP,
             SECOND,
+            SECOND_TEMP,
             THIRD,
             FULL
+        }
+    }
+
+    public static class LEDSubsystem {
+        public enum LEDColors {
+            RED(0.280),
+            BLUE(0.611),
+            GREEN(0.500),
+            YELLOW(0.388),
+            ORANGE(0.333),
+            PURPLE(0.721),
+            WHITE(0.99),
+            BLACK(0.01);
+
+            private final double color;
+            LEDColors(double color) {this.color = color;}
+
+            public double getColor() {return color;}
         }
     }
 

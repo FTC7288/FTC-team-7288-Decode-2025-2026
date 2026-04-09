@@ -37,7 +37,7 @@ public class FirstCommandAuto extends CommandOpMode {
         Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH,1,1, AngleUnit.RADIANS,0);
 
         robot.init(hardwareMap);
-        robot.follower.setStartingPose(Poses.RED_START_POSE_FRONT);
+        robot.follower.setStartingPose(Poses.RED_FRONT_START_POSE);
         paths.generatePaths(robot.follower);
 
 

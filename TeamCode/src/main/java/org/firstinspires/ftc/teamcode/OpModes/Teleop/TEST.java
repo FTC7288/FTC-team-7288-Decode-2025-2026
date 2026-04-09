@@ -23,6 +23,8 @@ import org.firstinspires.ftc.teamcode.CommandBase.Commands.LaunchCommand;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
+import kotlin.Unit;
+
 @TeleOp
 public class TEST extends CommandOpMode {
     Robot robot = Robot.getInstance();
@@ -89,7 +91,7 @@ public class TEST extends CommandOpMode {
 
     @Override
     public void run() {
-
+        super.run();
 
         robot.drive.updateIMUOrientation();
         robot.drive.driveFieldCentric(
@@ -99,9 +101,17 @@ public class TEST extends CommandOpMode {
                 robot.drive.getBotHeading()
         );
 
+        if (robot.limelight.getPose() != null) {
+            telemetry.addData("Turret Position X: ", robot.limelight.getPose().getPosition().x * 3.28084);
+            telemetry.addData("Turret Position Y: ", robot.limelight.getPose().getPosition().y * 3.28084);
+        }
+
+        telemetry.addData("Intake State: ", robot.intake.intakePositionSelector );
 
         telemetry.addData("State: ", robot.indexer.indexerPositionSelector);
         telemetry.addData("Indexer Position: ", robot.indexer.getIndexerPosition());
+        telemetry.addData("Intake Position: ", robot.intake.getIntakePosition());
+
 
         telemetry.addData("Current Pose X: ", robot.drive.getRobotPose().getX(DistanceUnit.INCH));
         telemetry.addData("Current Pose Y: ", robot.drive.getRobotPose().getY(DistanceUnit.INCH));
@@ -111,7 +121,6 @@ public class TEST extends CommandOpMode {
         telemetry.addData("Is FUll: ", robot.indexer.isFull());
 
         telemetry.update();
-        super.run();
     }
 
 

@@ -15,7 +15,7 @@ public class Flywheel extends SubsystemBase {
     private static FlywheelSpeedSelector flywheelSpeedSelector = FlywheelSpeedSelector.FLYWHEEL_OFF;
 
     private static InterpLUT velocityLUT = new InterpLUT();
-    private double desiredFlywheelVelocity = 0.5;
+    private double desiredFlywheelVelocity = 1000;
 
     public Flywheel () {
         // TODO: Add flywheel velocity LUT when we get the correct values (requires the big T)
