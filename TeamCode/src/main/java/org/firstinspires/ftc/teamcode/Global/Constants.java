@@ -40,6 +40,7 @@ public class Constants {
         public final static String IMUParametersJsonFileName = "BNO055IMUCalibration.json";
         public final static int LIMELIGHT_POLLING_HZ = 100;
         public static final double FLYWHEEL_ENCODER_TOLERANCE = 20;
+        public static final double METERS_TO_INCH_CONVERT_FACTOR = 39.37;
 
 
         // TODO: Add file reading to give the initial pose from auto or see if using a static non final variable works better
@@ -60,6 +61,7 @@ public class Constants {
         public final static double INTAKE_ANALOG_IN = 2.1;
 
         public enum INTAKE_POSITIONS {
+            OUTTAKE,
             INTAKE,
             TRANSFER,
             NEUTRAL
@@ -79,7 +81,7 @@ public class Constants {
 
     public final static class FlywheelSubsystem {
 
-        public static PIDFController flywheelPIDFCOntroller = new PIDFController(0.0015,0,0,0.00051);
+        public static PIDFController flywheelPIDFCOntroller = new PIDFController(0.004,0,0,0.00051);
         public enum FlywheelSpeedSelector {
             FLYWHEEL_OFF,
             FLYWHEEL_ON

@@ -37,21 +37,39 @@ public class Paths {
                         .setLinearHeadingInterpolation(Poses.RED_FRONT_SHOOT_POSE.getHeading(), Poses.RED_FRONT_FIRST_sPICKUP_POSE.getHeading())
                         .build();
 
-        PathChain RED_bPICKUP_aPICKUP_ONE_PATH = follower.pathBuilder()
+        PathChain RED_sPICKUP_ePICKUP_ONE_PATH = follower.pathBuilder()
                 .addPath(new BezierLine(Poses.RED_FRONT_FIRST_sPICKUP_POSE, Poses.RED_FRONT_FIRST_ePICKUP_POSE))
                     .setLinearHeadingInterpolation(Poses.RED_FRONT_FIRST_sPICKUP_POSE.getHeading(), Poses.RED_FRONT_FIRST_ePICKUP_POSE.getHeading())
                 .build();
 
-        PathChain RED_aPICKUP_SHOOT_PATH = follower.pathBuilder()
+        PathChain RED_ePICKUP_SHOOT_ONE_PATH = follower.pathBuilder()
                 .addPath(new BezierLine(Poses.RED_FRONT_FIRST_ePICKUP_POSE, Poses.RED_FRONT_SHOOT_POSE))
                 .setLinearHeadingInterpolation(Poses.RED_FRONT_FIRST_ePICKUP_POSE.getHeading(), Poses.RED_FRONT_SHOOT_POSE.getHeading())
                 .build();
 
+        PathChain RED_SHOOT_sPICKUP_TWO_PATH = follower.pathBuilder()
+                .addPath(new BezierLine(Poses.RED_FRONT_SHOOT_POSE, Poses.RED_FRONT_SECOND_sPICKUP_POSE))
+                .setLinearHeadingInterpolation(Poses.RED_FRONT_SHOOT_POSE.getHeading(), Poses.RED_FRONT_SECOND_sPICKUP_POSE.getHeading())
+                .build();
+
+        PathChain RED_sPICKUP_ePICKUP_TWO_PATH = follower.pathBuilder()
+                .addPath(new BezierLine(Poses.RED_FRONT_SECOND_sPICKUP_POSE,Poses.RED_FRONT_SECOND_ePICKUP_POSE))
+                .setLinearHeadingInterpolation(Poses.RED_FRONT_SECOND_sPICKUP_POSE.getHeading(),Poses.RED_FRONT_SECOND_ePICKUP_POSE.getHeading())
+                .build();
+
+        PathChain RED_ePICKUP_SHOOT_TWO_PATH = follower.pathBuilder()
+                .addPath(new BezierLine(Poses.RED_FRONT_SECOND_ePICKUP_POSE,Poses.RED_FRONT_SHOOT_POSE))
+                .setLinearHeadingInterpolation(Poses.RED_FRONT_SECOND_ePICKUP_POSE.getHeading(),Poses.RED_FRONT_SHOOT_POSE.getHeading())
+                .build();
 
         pathMap.put(PathNames.RED_START_SHOOT, RED_START_SHOOT_PATH);
-        pathMap.put("RED_SHOOT_bPICKUP", RED_SHOOT_bPICKUP_ONE_PATH);
-        pathMap.put("RED_bPICKUP_aPICKUP", RED_bPICKUP_aPICKUP_ONE_PATH);
-        pathMap.put("RED_aPICKUP_SHOOT", RED_aPICKUP_SHOOT_PATH);
+        pathMap.put("RED_SHOOT_sPICKUP_ONE", RED_SHOOT_bPICKUP_ONE_PATH);
+        pathMap.put("RED_sPICKUP_ePICKUP_ONE", RED_sPICKUP_ePICKUP_ONE_PATH);
+        pathMap.put("RED_ePICKUP_SHOOT_ONE", RED_ePICKUP_SHOOT_ONE_PATH);
+        pathMap.put("RED_SHOOT_sPICKUP_TWO", RED_SHOOT_sPICKUP_TWO_PATH);
+        pathMap.put("RED_sPICKUP_ePICKUP_TWO", RED_sPICKUP_ePICKUP_TWO_PATH);
+        pathMap.put("RED_ePICKUP_SHOOT_TWO",RED_ePICKUP_SHOOT_TWO_PATH);
+
     }
 
 

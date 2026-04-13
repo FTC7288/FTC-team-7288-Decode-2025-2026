@@ -35,9 +35,10 @@ public class TEST extends CommandOpMode {
         super.reset();
 
         Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
-        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH,1,1, AngleUnit.RADIANS,0);
+        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH,136,8.5, AngleUnit.RADIANS,Math.toRadians(90));
 
         robot.init(hardwareMap);
+        robot.drive.setInitialRobotPose();
         driver = new GamepadEx(gamepad1);
 
 
@@ -48,12 +49,12 @@ public class TEST extends CommandOpMode {
 
         Trigger driverLeftBumper = new GamepadButton(driver, GamepadKeys.Button.LEFT_BUMPER);
         driverLeftBumper.whileActiveContinuous(
-                new RunCommand(() -> robot.intake.startOuttake(), robot.intake)
+                new RunCommand(() -> robot.intake.setIntakeStateOuttake(), robot.intake)
         );
 
 
-        Trigger driverAButton = new GamepadButton(driver, GamepadKeys.Button.B);
-        driverAButton.whileActiveContinuous(
+        Trigger driverBButton = new GamepadButton(driver, GamepadKeys.Button.B);
+        driverBButton.whileActiveContinuous(
                 new LaunchCommand()
         ).whenInactive(
                 new InstantCommand(() -> robot.indexer.interruptForLaunch(false), robot.indexer)
@@ -64,9 +65,9 @@ public class TEST extends CommandOpMode {
                 () -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > Constants.GamePad.TRIGGER_THRESHOLD);
         robot.intake.setDefaultCommand(
                 new RunCommand(() -> {
-                    if (leftTriggerScheduler.get()) {
+                    if (leftTriggerScheduler.get() && !driverLeftBumper.get()) {
                         robot.intake.setIntakeStateIntake();
-                    } else {
+                    } else if (!driverLeftBumper.get()){
                         robot.intake.setIntakeStateNeutral();
                     }
                 }, robot.intake)
@@ -101,23 +102,26 @@ public class TEST extends CommandOpMode {
                 robot.drive.getBotHeading()
         );
 
+
         if (robot.limelight.getPose() != null) {
-            telemetry.addData("Turret Position X: ", robot.limelight.getPose().getPosition().x * 3.28084);
-            telemetry.addData("Turret Position Y: ", robot.limelight.getPose().getPosition().y * 3.28084);
+            telemetry.addData("Turret Position X: ", robot.limelight.getPose().getPosition().x * 39.37);
+            telemetry.addData("Turret Position Y: ", robot.limelight.getPose().getPosition().y * 39.37);
         }
 
-        telemetry.addData("Intake State: ", robot.intake.intakePositionSelector );
+        telemetry.addData("Rotation: ", robot.imu.getAngularOrientation().firstAngle);
+        telemetry.addData("Translational Angle: ", robot.turret.desiredAngle);
+        telemetry.addData("Translational Angle #2: ", robot.turret.translationalAngle);
+        telemetry.addData("Current Vector: ", robot.turret.currentPosVector.normF());
+        telemetry.addData("Initial Vector: ", robot.turret.initialPosVector.normF());
 
-        telemetry.addData("State: ", robot.indexer.indexerPositionSelector);
-        telemetry.addData("Indexer Position: ", robot.indexer.getIndexerPosition());
-        telemetry.addData("Intake Position: ", robot.intake.getIntakePosition());
+
+        telemetry.addData("Intake State: ", robot.intake.intakePositionSelector );
 
 
         telemetry.addData("Current Pose X: ", robot.drive.getRobotPose().getX(DistanceUnit.INCH));
         telemetry.addData("Current Pose Y: ", robot.drive.getRobotPose().getY(DistanceUnit.INCH));
 
-
-        telemetry.addData("Break Beam: ", robot.breakBeam.getState());
+        telemetry.addData("Distance: ", robot.flywheel.distanceVector.normF());
         telemetry.addData("Is FUll: ", robot.indexer.isFull());
 
         telemetry.update();

@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.util.InterpLUT;
 
+import org.ejml.simple.SimpleMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Constants.FlywheelSubsystem.*;
@@ -13,12 +15,18 @@ import Util.Range;
 public class Flywheel extends SubsystemBase {
     Robot robot = Robot.getInstance();
     private static FlywheelSpeedSelector flywheelSpeedSelector = FlywheelSpeedSelector.FLYWHEEL_OFF;
-
-    private static InterpLUT velocityLUT = new InterpLUT();
-    private double desiredFlywheelVelocity = 1000;
+    private Pose2D TEAM_GOAL_POSE;
+    public SimpleMatrix distanceVector = new SimpleMatrix(2,1);
+    private double desiredFlywheelVelocity = 0;
 
     public Flywheel () {
-        // TODO: Add flywheel velocity LUT when we get the correct values (requires the big T)
+
+        if (Constants.AllianceSelection.SELECTED_TEAM.equals(Constants.AllianceSelection.RED_TEAM)) {
+            TEAM_GOAL_POSE = Constants.AllianceSelection.RED_GOAL_POSE;
+        } else {
+            TEAM_GOAL_POSE = Constants.AllianceSelection.BLUE_GOAL_POSE;
+        }
+
     }
 
 
@@ -50,24 +58,20 @@ public class Flywheel extends SubsystemBase {
         robot.flywheelBottomMotor.set(0);
     }
 
+    // TODO: Make sure that the speeds are correct when shooting
+    private void setTargetFlywheelVelocity(Pose2D currentPose) {
+        distanceVector.set(0,0, TEAM_GOAL_POSE.getX(DistanceUnit.INCH) - currentPose.getX(DistanceUnit.INCH));
+        distanceVector.set(1,0, TEAM_GOAL_POSE.getY(DistanceUnit.INCH) - currentPose.getY(DistanceUnit.INCH));
 
-    // TODO: Finish setting up
-    private double setTargetFlywheelVelocity(Pose2D currentPose) {
-
-
-
-
-
-        //Temp
-        return 0;
+        desiredFlywheelVelocity = Constants.FlywheelSubsystem.flywheelPIDFCOntroller.calculate(robot.flywheelEncoder.getCorrectedVelocity(),3.74 * distanceVector.normF() + 913.37);
     }
 
     @Override
     public void periodic() {
+        setTargetFlywheelVelocity(robot.drive.getRobotPose());
         switch (flywheelSpeedSelector) {
             case FLYWHEEL_ON:
-                // TODO: remove this temp setup for the pidf controller
-                setFlywheelVelocity(0.5);
+                setFlywheelVelocity(desiredFlywheelVelocity);
                 break;
             case FLYWHEEL_OFF:
                 setFlywheelVelocityZero();

@@ -34,6 +34,9 @@ public class Intake extends SubsystemBase {
     public void setIntakeStateIntake() {
         intakePositionSelector  = Constants.IntakeSubsystem.INTAKE_POSITIONS.INTAKE;
     }
+    public void setIntakeStateOuttake() {
+        intakePositionSelector  = Constants.IntakeSubsystem.INTAKE_POSITIONS.OUTTAKE;
+    }
     public void setIntakeStateTransfer() {
         intakePositionSelector  = Constants.IntakeSubsystem.INTAKE_POSITIONS.TRANSFER;
     }
@@ -70,6 +73,10 @@ public class Intake extends SubsystemBase {
     public void periodic () {
 
         switch (intakePositionSelector ) {
+            case OUTTAKE:
+                setIntakeIntake();
+                startOuttake();
+                break;
             case INTAKE:
                 setIntakeIntake();
                 startIntake();

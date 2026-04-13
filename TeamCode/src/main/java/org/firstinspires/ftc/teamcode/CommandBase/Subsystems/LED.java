@@ -24,7 +24,6 @@ public class LED extends SubsystemBase {
     }
 
 
-    // TODO: Can be changed depending on what we are going to have the robots flywheel do
     @Override
     public void periodic() {
         if (robot.flywheel.isFlywheelOn()) {

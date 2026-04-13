@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
 import Util.MecanumDrive;
@@ -35,6 +36,14 @@ public class Drive extends SubsystemBase {
         );
     }
 
+    public void setInitialRobotPose() {
+        robot.otos.setPosition(
+                new SparkFunOTOS.Pose2D(
+                        Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getX(DistanceUnit.INCH),
+                        Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getY(DistanceUnit.INCH),
+                        Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getHeading(AngleUnit.RADIANS))
+        );
+    }
 
     public void driveFieldCentric(double speedY, double speedX, double rotationX, double botHeading) {
         mecanumDrive.driveFieldCentric(
@@ -59,7 +68,7 @@ public class Drive extends SubsystemBase {
         imuAngles = robot.imu.getAngularOrientation();
     }
 
-    // TODO: Add Kalman filtering for MegaTag 2 pose and add on the velocity or acceleration feedforward to the pose for on the move shooting (not sure which one it needs to be tested)
+    // TODO: Add Kalman filtering for MegaTag 1 pose and add on the velocity or acceleration feedforward to the pose for on the move shooting (not sure which one it needs to be tested)
 
 
     public Pose2D getRobotPose() {

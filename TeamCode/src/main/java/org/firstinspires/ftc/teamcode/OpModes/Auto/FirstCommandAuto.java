@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.FollowPath;
+import org.firstinspires.ftc.teamcode.CommandBase.Commands.InitializeAutoCommand;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.LaunchCommand;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Paths;
@@ -30,11 +31,11 @@ public class FirstCommandAuto extends CommandOpMode {
 
     @Override
     public void initialize() {
+        org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.SELECTED_TEAM = org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.RED_TEAM;
+        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, 0,0,AngleUnit.RADIANS, Math.toRadians(45));
+
         super.reset();
         CommandScheduler.getInstance();
-
-        org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.SELECTED_TEAM = org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.RED_TEAM;
-        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH,1,1, AngleUnit.RADIANS,0);
 
         robot.init(hardwareMap);
         robot.follower.setStartingPose(Poses.RED_FRONT_START_POSE);
@@ -43,11 +44,7 @@ public class FirstCommandAuto extends CommandOpMode {
 
         schedule(
                 new RunCommand(() -> robot.follower.update()),
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> robot.flywheel.turnFlywheelOn()),
-                        new InstantCommand(() -> robot.indexer.indexerPositionSelector = Constants.IndexerSubsystem.IndexerPositionSelector.THIRD),
-                        new InstantCommand(() -> robot.intake.setIntakeStateNeutral())),
-
+                new InitializeAutoCommand(),
                 new SequentialCommandGroup(
                         new FollowPath(robot.follower, paths.pathMap.get(Constants.PathNames.RED_START_SHOOT)),
 
@@ -58,7 +55,7 @@ public class FirstCommandAuto extends CommandOpMode {
                                 new InstantCommand(() -> robot.intake.setIntakeStateIntake()),
                                 new RunCommand(() -> robot.indexer.interruptForLaunch(false))),
 
-                        new FollowPath(robot.follower, paths.pathMap.get("RED_bPICKUP_aPICKUP")),
+                        new FollowPath(robot.follower, paths.pathMap.get("RED_bPICKUP_aPICKUP"), 0.5),
 
                         new FollowPath(robot.follower, paths.pathMap.get("RED_aPICKUP_SHOOT")),
 
@@ -73,7 +70,5 @@ public class FirstCommandAuto extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("Follower is busy: ", robot.follower.isBusy());
-        telemetry.update();
     }
 }

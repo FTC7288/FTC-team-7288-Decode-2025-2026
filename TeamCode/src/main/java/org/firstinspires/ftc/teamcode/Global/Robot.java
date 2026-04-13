@@ -74,10 +74,10 @@ public class Robot {
         frontLeftMotor.setInverted(true);
         backLeftMotor.setInverted(true);
 
-        frontLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        frontLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        backLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        frontRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        backRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
         frontLeftMotor.setRunMode(Motor.RunMode.RawPower);
         frontRightMotor.setRunMode(Motor.RunMode.RawPower);
@@ -102,7 +102,7 @@ public class Robot {
         flywheelTopMotor.setInverted(true);
         flywheelBottomMotor.setInverted(false);
 
-        flywheelEncoder = flywheelTopMotor.encoder;
+        flywheelEncoder = flywheelBottomMotor.encoder;
 
 
         //Intake Motor
