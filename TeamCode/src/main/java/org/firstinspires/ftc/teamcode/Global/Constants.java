@@ -167,7 +167,30 @@ public class Constants {
 
 
     public static final class PathNames {
-        public final static String RED_START_SHOOT = "RED_START_SHOOT";
+        //Red Front
+        public final static String RED_START_SHOOT_FRONT = "RED_START_SHOOT_FRONT";
+        public final static String RED_SHOOT_sPICKUP_ONE_FRONT = "RED_SHOOT_sPICKUP_ONE_FRONT";
+        public final static String RED_sPICKUP_ePICKUP_ONE_FRONT = "RED_sPICKUP_ePICKUP_ONE_FRONT";
+        public final static String RED_ePICKUP_SHOOT_ONE_FRONT = "RED_ePICKUP_SHOOT_ONE_FRONT";
+        public final static String RED_SHOOT_sPICKUP_TWO_FRONT = "RED_SHOOT_sPICKUP_TWO_FRONT";
+        public final static String RED_sPICKUP_ePICKUP_TWO_FRONT = "RED_sPICKUP_ePICKUP_TWO_FRONT";
+        public final static String RED_ePICKUP_SHOOT_TWO_FRONT = "RED_ePICKUP_SHOOT_TWO_FRONT";
+        public final static String RED_MOVE_OFF_FRONT = "BLUE_MOVE_OFF_FRONT";
+
+        //Red Back
+
+        //Blue Front
+        public final static String BLUE_START_SHOOT_FRONT = "RED_START_SHOOT_FRONT";
+        public final static String BLUE_SHOOT_sPICKUP_ONE_FRONT = "RED_SHOOT_sPICKUP_ONE_FRONT";
+        public final static String BLUE_sPICKUP_ePICKUP_ONE_FRONT = "RED_sPICKUP_ePICKUP_ONE_FRONT";
+        public final static String BLUE_ePICKUP_SHOOT_ONE_FRONT = "RED_ePICKUP_SHOOT_ONE_FRONT";
+        public final static String BLUE_SHOOT_sPICKUP_TWO_FRONT = "RED_SHOOT_sPICKUP_TWO_FRONT";
+        public final static String BLUE_sPICKUP_ePICKUP_TWO_FRONT = "RED_sPICKUP_ePICKUP_TWO_FRONT";
+        public final static String BLUE_ePICKUP_SHOOT_TWO_FRONT = "RED_ePICKUP_SHOOT_TWO_FRONT";
+        public final static String BLUE_MOVE_OFF_FRONT = "BLUE_MOVE_OFF_FRONT";
+
+        //Blue Back
+
     }
 
 

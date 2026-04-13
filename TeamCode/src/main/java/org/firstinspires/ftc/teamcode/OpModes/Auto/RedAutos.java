@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.CommandBase.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.InitializeAutoCommand;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.LaunchCommand;
 import org.firstinspires.ftc.teamcode.Global.Constants;
+import org.firstinspires.ftc.teamcode.Global.Constants.PathNames;
 import org.firstinspires.ftc.teamcode.Global.Paths;
 import org.firstinspires.ftc.teamcode.Global.Poses;
 import org.firstinspires.ftc.teamcode.Global.Robot;
@@ -63,30 +64,31 @@ public class RedAutos extends SelectableOpMode {
                     new RunCommand(() -> robot.follower.update()),
                     new InitializeAutoCommand(),
                     new SequentialCommandGroup(
-                            new FollowPath(robot.follower, paths.pathMap.get(Constants.PathNames.RED_START_SHOOT)),
+                            new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_START_SHOOT_FRONT)),
                             new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
                             new ParallelDeadlineGroup(
-                                    new FollowPath(robot.follower, paths.pathMap.get("RED_SHOOT_sPICKUP_ONE")),
+                                    new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_SHOOT_sPICKUP_ONE_FRONT)),
                                     new InstantCommand(() -> robot.intake.setIntakeStateIntake()),
                                     new RunCommand(() -> robot.indexer.interruptForLaunch(false))),
 
-                            new FollowPath(robot.follower, paths.pathMap.get("RED_sPICKUP_ePICKUP_ONE"), 0.5),
+                            new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_sPICKUP_ePICKUP_ONE_FRONT), 0.5),
 
-                            new FollowPath(robot.follower, paths.pathMap.get("RED_ePICKUP_SHOOT_ONE")),
+                            new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_ePICKUP_SHOOT_ONE_FRONT)),
 
                             new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
                             new ParallelDeadlineGroup(
-                                    new FollowPath(robot.follower, paths.pathMap.get("RED_SHOOT_sPICKUP_TWO")),
+                                    new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_SHOOT_sPICKUP_TWO_FRONT)),
                                     new InstantCommand(() -> robot.intake.setIntakeStateIntake()),
                                     new RunCommand(() -> robot.indexer.interruptForLaunch(false))),
 
-                            new FollowPath(robot.follower, paths.pathMap.get("RED_sPICKUP_ePICKUP_TWO")),
+                            new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_sPICKUP_ePICKUP_TWO_FRONT)),
 
-                            new FollowPath(robot.follower, paths.pathMap.get("RED_ePICKUP_SHOOT_TWO")),
-                            new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand())
+                            new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_ePICKUP_SHOOT_TWO_FRONT)),
+                            new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
+                            new FollowPath(robot.follower, paths.pathMap.get(PathNames.RED_MOVE_OFF_FRONT))
 
                     )
             );
