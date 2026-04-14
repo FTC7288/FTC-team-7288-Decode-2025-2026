@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.util.InterpLUT;
 
 import org.ejml.simple.SimpleMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Global.Constants;
@@ -63,12 +64,16 @@ public class Flywheel extends SubsystemBase {
         distanceVector.set(0,0, TEAM_GOAL_POSE.getX(DistanceUnit.INCH) - currentPose.getX(DistanceUnit.INCH));
         distanceVector.set(1,0, TEAM_GOAL_POSE.getY(DistanceUnit.INCH) - currentPose.getY(DistanceUnit.INCH));
 
-        desiredFlywheelVelocity = Constants.FlywheelSubsystem.flywheelPIDFCOntroller.calculate(robot.flywheelEncoder.getCorrectedVelocity(),3.74 * distanceVector.normF() + 913.37);
+        double currentDistance = distanceVector.normF();
+
+        Constants.FlywheelSubsystem.flywheelPIDFCOntroller.setP((currentDistance < 100) ? 0.004: 0.0053);
+
+        desiredFlywheelVelocity = Constants.FlywheelSubsystem.flywheelPIDFCOntroller.calculate(robot.flywheelEncoder.getCorrectedVelocity(),5.18 * currentDistance + 766.47);
     }
 
     @Override
     public void periodic() {
-        setTargetFlywheelVelocity(robot.drive.getRobotPose());
+        setTargetFlywheelVelocity((Constants.HardwareInitialization.AUTO) ? new Pose2D(DistanceUnit.INCH, robot.follower.getPose().getX(),robot.follower.getPose().getY(), AngleUnit.RADIANS, robot.follower.getPose().getHeading()) : robot.drive.getRobotPose());
         switch (flywheelSpeedSelector) {
             case FLYWHEEL_ON:
                 setFlywheelVelocity(desiredFlywheelVelocity);

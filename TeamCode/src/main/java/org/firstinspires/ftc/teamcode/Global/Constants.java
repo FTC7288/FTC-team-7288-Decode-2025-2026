@@ -41,6 +41,7 @@ public class Constants {
         public final static int LIMELIGHT_POLLING_HZ = 100;
         public static final double FLYWHEEL_ENCODER_TOLERANCE = 20;
         public static final double METERS_TO_INCH_CONVERT_FACTOR = 39.37;
+        public static final boolean AUTO = false;
 
 
         // TODO: Add file reading to give the initial pose from auto or see if using a static non final variable works better
@@ -58,7 +59,7 @@ public class Constants {
         public final static double INTAKE_POSITION = 0.7;
         public final static double NEUTRAL_POSITION = 0.5;
 
-        public final static double INTAKE_ANALOG_IN = 2.1;
+        public final static double INTAKE_ANALOG_IN = 2;
 
         public enum INTAKE_POSITIONS {
             OUTTAKE,

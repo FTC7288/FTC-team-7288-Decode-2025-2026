@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -52,24 +53,25 @@ public class Turret extends SubsystemBase {
         translationalAngle = Math.acos(initialPosVector.dot(currentPosVector) / (currentPosVector.normF() * initialPosVector.normF()));
 
         double multiplier;
-//        if (currentPose.getX(DistanceUnit.INCH) - Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getX(DistanceUnit.INCH) < 0) {
-//            multiplier = 1;
-//        } else {
-//            multiplier = -1;
-//        }
+        if (currentPose.getX(DistanceUnit.INCH) - Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getX(DistanceUnit.INCH) < 0) {
+            multiplier = 1;
+        } else {
+            multiplier = -1;
+        }
 
-        desiredAngle = Constants.TurretSubsystem.TICK_CONSTANT * ((Math.toDegrees(translationalAngle) * -1) - Math.toDegrees(robot.drive.getIMUOrientation()));
+        desiredAngle = Constants.TurretSubsystem.TICK_CONSTANT * ((Math.toDegrees(translationalAngle) * multiplier) - Math.toDegrees(robot.drive.getIMUOrientation()));
         return Constants.TurretSubsystem.turretPIDFController.calculate(robot.turretEncoder.getPosition(), desiredAngle);
     }
 
     @Override
     public void periodic() {
+        double turretPosition = calculateTurretPosition((Constants.HardwareInitialization.AUTO) ? new Pose2D(DistanceUnit.INCH, robot.follower.getPose().getX(),robot.follower.getPose().getY(), AngleUnit.RADIANS, robot.follower.getPose().getHeading()) : robot.drive.getRobotPose());
         switch (turretState) {
             case TURRET_OFF:
                 setTurretPower(0);
                 break;
             case TURRET_ON:
-                setTurretPower(calculateTurretPosition(robot.drive.getRobotPose()));
+                setTurretPower(turretPosition);
                 break;
         }
     }

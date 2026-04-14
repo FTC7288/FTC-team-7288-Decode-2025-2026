@@ -120,6 +120,8 @@ class DistanceToVelocityTuner extends OpMode {
         telemetry.addData("Desired Velocity: ", currentVelocity);
         telemetry.addData("Current Velocity: ", robot.flywheelEncoder.getCorrectedVelocity());
         telemetry.addData("Current Distance: ", distanceVector.normF());
+        telemetry.addData("Indexer Analog: ", robot.intakeAnalog.getVoltage());
+
         telemetry.update();
     }
 }

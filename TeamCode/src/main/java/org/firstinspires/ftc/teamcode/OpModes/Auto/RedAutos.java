@@ -41,7 +41,10 @@ public class RedAutos extends SelectableOpMode {
             });
         });
     }
+
 }
+
+
 
     class FrontNineBall extends CommandOpMode {
         Robot robot = Robot.getInstance();
@@ -52,7 +55,7 @@ public class RedAutos extends SelectableOpMode {
             org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.SELECTED_TEAM = org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.RED_TEAM;
             Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, 0,0, AngleUnit.RADIANS, Math.toRadians(45));
 
-            super.reset();
+            CommandScheduler.getInstance().reset();
             CommandScheduler.getInstance();
 
             robot.init(hardwareMap);
@@ -94,8 +97,7 @@ public class RedAutos extends SelectableOpMode {
 
         @Override
         public void run() {
-            super.run();
-
+            CommandScheduler.getInstance().run();
         }
 
     }

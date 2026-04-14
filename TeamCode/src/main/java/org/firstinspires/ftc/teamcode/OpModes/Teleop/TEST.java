@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 
-import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -23,6 +22,7 @@ import org.firstinspires.ftc.teamcode.CommandBase.Commands.LaunchCommand;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
+import Util.CommandOpMode;
 import kotlin.Unit;
 
 @TeleOp
@@ -35,7 +35,7 @@ public class TEST extends CommandOpMode {
         super.reset();
 
         Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
-        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH,136,8.5, AngleUnit.RADIANS,Math.toRadians(90));
+        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = Constants.HardwareInitialization.END_ROBOT_POSE;
 
         robot.init(hardwareMap);
         robot.drive.setInitialRobotPose();
@@ -103,10 +103,6 @@ public class TEST extends CommandOpMode {
         );
 
 
-        if (robot.limelight.getPose() != null) {
-            telemetry.addData("Turret Position X: ", robot.limelight.getPose().getPosition().x * 39.37);
-            telemetry.addData("Turret Position Y: ", robot.limelight.getPose().getPosition().y * 39.37);
-        }
 
         telemetry.addData("Rotation: ", robot.imu.getAngularOrientation().firstAngle);
         telemetry.addData("Translational Angle: ", robot.turret.desiredAngle);
@@ -129,6 +125,7 @@ public class TEST extends CommandOpMode {
 
 
     public void end() {
+        Constants.HardwareInitialization.END_ROBOT_POSE = robot.drive.getRobotPose();
         robot.limelight.stop();
     }
 

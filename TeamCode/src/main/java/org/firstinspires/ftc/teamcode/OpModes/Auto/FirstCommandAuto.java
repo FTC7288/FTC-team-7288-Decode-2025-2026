@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
-import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -9,6 +8,7 @@ import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -21,6 +21,8 @@ import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Paths;
 import org.firstinspires.ftc.teamcode.Global.Poses;
 import org.firstinspires.ftc.teamcode.Global.Robot;
+
+import Util.CommandOpMode;
 
 @Autonomous
 public class FirstCommandAuto extends CommandOpMode {
@@ -65,10 +67,14 @@ public class FirstCommandAuto extends CommandOpMode {
         );
     }
 
-
-
     @Override
     public void run() {
         super.run();
+    }
+
+    @Override
+    public void end() {
+        robot.limelight.stop();
+        Constants.HardwareInitialization.END_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, robot.follower.getPose().getX(),robot.follower.getPose().getY(),AngleUnit.RADIANS, robot.follower.getPose().getHeading());
     }
 }

@@ -79,7 +79,11 @@ public class Intake extends SubsystemBase {
                 break;
             case INTAKE:
                 setIntakeIntake();
-                startIntake();
+                if (robot.indexer.isFull()) {
+                    startOuttake();
+                } else {
+                    startIntake();
+                }
                 break;
             case NEUTRAL:
                 setIntakeNeutral();
