@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 
+import com.pedropathing.control.KalmanFilterParameters;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 import org.firstinspires.ftc.teamcode.Global.Robot;
+import org.opencv.video.KalmanFilter;
 
 import Util.MecanumDrive;
 
@@ -72,9 +74,12 @@ public class Drive extends SubsystemBase {
 
 
     public Pose2D getRobotPose() {
-        Pose3D limelightPose = robot.limelight.getPose();
+        Pose2D limelightPose = robot.limelight.getPose();
         SparkFunOTOS.Pose2D otosPose = robot.otos.getPosition();
         SparkFunOTOS.Pose2D otosVelocity = robot.otos.getVelocity();
+
+
+
 
         return new Pose2D(DistanceUnit.INCH, otosPose.x, otosPose.y, AngleUnit.RADIANS, otosPose.h);
     }

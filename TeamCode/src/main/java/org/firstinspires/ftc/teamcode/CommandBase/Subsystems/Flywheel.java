@@ -59,7 +59,6 @@ public class Flywheel extends SubsystemBase {
         robot.flywheelBottomMotor.set(0);
     }
 
-    // TODO: Make sure that the speeds are correct when shooting
     private void setTargetFlywheelVelocity(Pose2D currentPose) {
         distanceVector.set(0,0, TEAM_GOAL_POSE.getX(DistanceUnit.INCH) - currentPose.getX(DistanceUnit.INCH));
         distanceVector.set(1,0, TEAM_GOAL_POSE.getY(DistanceUnit.INCH) - currentPose.getY(DistanceUnit.INCH));

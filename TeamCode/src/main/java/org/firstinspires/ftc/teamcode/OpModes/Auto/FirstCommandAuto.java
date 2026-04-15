@@ -48,7 +48,7 @@ public class FirstCommandAuto extends CommandOpMode {
                 new RunCommand(() -> robot.follower.update()),
                 new InitializeAutoCommand(),
                 new SequentialCommandGroup(
-                        new FollowPath(robot.follower, paths.pathMap.get(Constants.PathNames.RED_START_SHOOT)),
+                        new FollowPath(robot.follower, paths.pathMap.get(Constants.PathNames.RED_START_SHOOT_FRONT)),
 
                         new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 

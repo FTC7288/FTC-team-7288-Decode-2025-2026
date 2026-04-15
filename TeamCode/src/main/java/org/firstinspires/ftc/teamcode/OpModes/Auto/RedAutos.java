@@ -29,6 +29,8 @@ import org.firstinspires.ftc.teamcode.Global.Robot;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import Util.SelectableCommandOpMode;
+
 // TODO: Finish adding in the needed thingamajigs for the selectable thingamajig (im so pro at naming)
 @Autonomous(name = "RED", group = "RED")
 public class RedAutos extends SelectableOpMode {
@@ -47,7 +49,7 @@ public class RedAutos extends SelectableOpMode {
 
 
 
-    class FrontNineBall extends CommandOpMode {
+    class FrontNineBall extends SelectableCommandOpMode {
         Robot robot = Robot.getInstance();
         Paths paths = new Paths();
 
@@ -56,14 +58,13 @@ public class RedAutos extends SelectableOpMode {
             org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.SELECTED_TEAM = org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.RED_TEAM;
             Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, 0,0, AngleUnit.RADIANS, Math.toRadians(45));
 
-            CommandScheduler.getInstance().reset();
-            CommandScheduler.getInstance();
+            super.reset();
 
             robot.init(hardwareMap);
             robot.follower.setStartingPose(Poses.RED_FRONT_START_POSE);
             paths.generatePaths(robot.follower);
 
-            schedule(
+            super.schedule(
                     new RunCommand(() -> robot.follower.update()),
                     new InitializeAutoCommand(),
                     new SequentialCommandGroup(
@@ -98,9 +99,7 @@ public class RedAutos extends SelectableOpMode {
         }
 
         @Override
-        public void run() {
-            CommandScheduler.getInstance().run();
-        }
+        public void run() {super.run();}
 
     }
 

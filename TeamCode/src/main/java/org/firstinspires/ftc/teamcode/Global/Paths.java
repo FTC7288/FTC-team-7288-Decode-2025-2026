@@ -73,10 +73,12 @@ public class Paths {
         // follower.pathBuilder().addPath(new BezierLine()).setLinearHeadingInterpolation().build();
 
         //Red Back
-        PathChain RED_START_SHOOT_ONE_BACK = follower.pathBuilder().addPath(new BezierLine(Poses.RED_BACK_START_POSE, Poses.RED_BACK_SHOOT_POSE)).setLinearHeadingInterpolation().build();
+        PathChain RED_START_SHOOT_ONE_BACK = follower.pathBuilder()
+                .addPath(new BezierLine(Poses.RED_BACK_START_POSE, Poses.RED_BACK_SHOOT_POSE))
+                .setLinearHeadingInterpolation(Poses.RED_BACK_START_POSE.getHeading(), Poses.RED_BACK_SHOOT_POSE.getHeading())
+                .build();
 
         // Blue Front
-        //Red Front
         PathChain BLUE_START_SHOOT_FRONT = follower.pathBuilder()
                 .addPath(new BezierLine(Poses.BLUE_FRONT_START_POSE, Poses.BLUE_FRONT_SHOOT_POSE))
                 .setLinearHeadingInterpolation(Poses.BLUE_FRONT_START_POSE.getHeading(), Poses.BLUE_FRONT_SHOOT_POSE.getHeading())
@@ -116,6 +118,8 @@ public class Paths {
                 .addPath(new BezierLine(Poses.BLUE_FRONT_SHOOT_POSE, Poses.BLUE_FRONT_MOVEOFF_POSE))
                 .setLinearHeadingInterpolation(Poses.BLUE_FRONT_SHOOT_POSE.getHeading(), Poses.BLUE_FRONT_MOVEOFF_POSE.getHeading())
                 .build();
+
+        //Blue Back
 
         pathMap.put(PathNames.RED_START_SHOOT_FRONT, RED_START_SHOOT_FRONT);
         pathMap.put(PathNames.RED_SHOOT_sPICKUP_TWO_FRONT, RED_SHOOT_sPICKUP_ONE_FRONT);
