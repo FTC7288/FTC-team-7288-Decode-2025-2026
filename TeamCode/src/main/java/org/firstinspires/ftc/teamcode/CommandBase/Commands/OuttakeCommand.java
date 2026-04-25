@@ -4,20 +4,23 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
-public class LaunchCommand extends CommandBase {
+public class OuttakeCommand extends CommandBase {
     Robot robot = Robot.getInstance();
+    private boolean pullIntakeIn;
 
-
-    @Override
-    public void initialize() {
-        robot.intake.setIntakeStateTransfer();
-        robot.indexer.interruptForLaunch(true);
+    public OuttakeCommand(boolean pullIntakeIn) {
+        this.pullIntakeIn = pullIntakeIn;
     }
 
     @Override
+    public void initialize() {
+        robot.intake.setIntakeStateOuttake();
+        robot.intake.outtakeIntakePosition(pullIntakeIn);
+    }
+
     public boolean isFinished() {
         return true;
     }
 
-}
 
+}

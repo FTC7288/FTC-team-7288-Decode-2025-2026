@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.CommandBase.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.util.InterpLUT;
+import com.arcrobotics.ftclib.util.Timing;
 
 import org.ejml.simple.SimpleMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -59,7 +60,7 @@ public class Flywheel extends SubsystemBase {
         robot.flywheelBottomMotor.set(0);
     }
 
-    private void setTargetFlywheelVelocity(Pose2D currentPose) {
+    private double setTargetFlywheelVelocity(Pose2D currentPose) {
         distanceVector.set(0,0, TEAM_GOAL_POSE.getX(DistanceUnit.INCH) - currentPose.getX(DistanceUnit.INCH));
         distanceVector.set(1,0, TEAM_GOAL_POSE.getY(DistanceUnit.INCH) - currentPose.getY(DistanceUnit.INCH));
 
@@ -67,15 +68,17 @@ public class Flywheel extends SubsystemBase {
 
         Constants.FlywheelSubsystem.flywheelPIDFCOntroller.setP((currentDistance < 100) ? 0.004: 0.0053);
 
-        desiredFlywheelVelocity = Constants.FlywheelSubsystem.flywheelPIDFCOntroller.calculate(robot.flywheelEncoder.getCorrectedVelocity(),5.18 * currentDistance + 766.47);
+        desiredFlywheelVelocity = 5.87 * currentDistance + 756.93;
+
+        return Constants.FlywheelSubsystem.flywheelPIDFCOntroller.calculate(robot.flywheelEncoder.getCorrectedVelocity(),desiredFlywheelVelocity);
     }
 
     @Override
     public void periodic() {
-        setTargetFlywheelVelocity((Constants.HardwareInitialization.AUTO) ? new Pose2D(DistanceUnit.INCH, robot.follower.getPose().getX(),robot.follower.getPose().getY(), AngleUnit.RADIANS, robot.follower.getPose().getHeading()) : robot.drive.getRobotPose());
+        double flywheelPower = setTargetFlywheelVelocity((Constants.HardwareInitialization.AUTO) ? new Pose2D(DistanceUnit.INCH, robot.follower.getPose().getX(),robot.follower.getPose().getY(), AngleUnit.RADIANS, robot.follower.getHeading()) : robot.drive.getRobotPose());
         switch (flywheelSpeedSelector) {
             case FLYWHEEL_ON:
-                setFlywheelVelocity(desiredFlywheelVelocity);
+                setFlywheelVelocity(flywheelPower);
                 break;
             case FLYWHEEL_OFF:
                 setFlywheelVelocityZero();

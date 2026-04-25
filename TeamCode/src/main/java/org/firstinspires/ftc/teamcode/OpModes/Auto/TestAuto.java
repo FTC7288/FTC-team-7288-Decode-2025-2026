@@ -8,6 +8,8 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.BezierPoint;
+import com.pedropathing.geometry.CoordinateSystem;
+import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
@@ -17,14 +19,20 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Global.Paths;
+import org.firstinspires.ftc.teamcode.Global.Poses;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous
 public class TestAuto extends OpMode {
+    Robot robot = Robot.getInstance();
     private final Pose startPose = new Pose(72, 72, Math.toRadians(0));
     private final Pose interPose = new Pose(24 + 72, -24 + 72, Math.toRadians(90));
     private final Pose endPose = new Pose(24 + 72, 24 + 72, Math.toRadians(45));
+
+    public Pose start = new Pose(22.07,121.15,Math.toRadians(-225));
+    public Pose end = new Pose(30,121.15, Math.toRadians(-225));
 
     private PathChain triangle;
 
@@ -38,17 +46,30 @@ public class TestAuto extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        draw();
 
-        if (follower.atParametricEnd()) {
-            follower.followPath(triangle, true);
-        }
+
+        telemetry.addData("OTOS X: ", robot.otos.getPosition().x);
+        telemetry.addData("OTOS Y: ", robot.otos.getPosition().y);
+
+        telemetry.addData("Follower X: ", follower.getPose().getX());
+        telemetry.addData("Follower Y: ", follower.getPose().getY());
+
+
+
     }
 
     @Override
     public void init() {
+        org.firstinspires.ftc.teamcode.Global.Constants.HardwareInitialization.AUTO = true;
+        org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.SELECTED_TEAM = org.firstinspires.ftc.teamcode.Global.Constants.AllianceSelection.RED_TEAM;
+        org.firstinspires.ftc.teamcode.Global.Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, 0,0, AngleUnit.RADIANS, Math.toRadians(45));
+        org.firstinspires.ftc.teamcode.Global.Constants.HardwareInitialization.OFFSET_ANGLE = 0;
+
+        robot.init(hardwareMap);
+
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(72, 72));
+        follower.setStartingPose(start);
+
     }
 
 
@@ -57,18 +78,14 @@ public class TestAuto extends OpMode {
     }
 
     public void start() {
-        follower.setStartingPose(startPose);
 
-        triangle = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, interPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), interPose.getHeading())
-                .addPath(new BezierLine(interPose, endPose))
-                .setLinearHeadingInterpolation(interPose.getHeading(), endPose.getHeading())
-                .addPath(new BezierLine(endPose, startPose))
-                .setLinearHeadingInterpolation(endPose.getHeading(), startPose.getHeading())
+        PathChain blue= follower.pathBuilder()
+                .addPath(new BezierLine(start, end))
+                .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
                 .build();
 
-        follower.followPath(triangle);
+
+        follower.followPath(blue, true);
     }
 
 

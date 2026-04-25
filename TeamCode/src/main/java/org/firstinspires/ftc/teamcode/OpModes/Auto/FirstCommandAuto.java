@@ -48,18 +48,18 @@ public class FirstCommandAuto extends CommandOpMode {
                 new RunCommand(() -> robot.follower.update()),
                 new InitializeAutoCommand(),
                 new SequentialCommandGroup(
-                        new FollowPath(robot.follower, paths.pathMap.get(Constants.PathNames.RED_START_SHOOT_FRONT)),
+                        new FollowPath(robot.follower, paths.RED_START_SHOOT_FRONT),
 
                         new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
-                        new ParallelDeadlineGroup(
-                                new FollowPath(robot.follower, paths.pathMap.get("RED_SHOOT_bPICKUP")),
-                                new InstantCommand(() -> robot.intake.setIntakeStateIntake()),
-                                new RunCommand(() -> robot.indexer.interruptForLaunch(false))),
-
-                        new FollowPath(robot.follower, paths.pathMap.get("RED_bPICKUP_aPICKUP"), 0.5),
-
-                        new FollowPath(robot.follower, paths.pathMap.get("RED_aPICKUP_SHOOT")),
+//                        new ParallelDeadlineGroup(
+//                                new FollowPath(robot.follower, paths.pathMap.get("RED_SHOOT_bPICKUP")),
+//                                new InstantCommand(() -> robot.intake.setIntakeStateIntake()),
+//                                new RunCommand(() -> robot.indexer.interruptForLaunch(false))),
+//
+//                        new FollowPath(robot.follower, paths.pathMap.get("RED_bPICKUP_aPICKUP"), 0.5),
+//
+//                        new FollowPath(robot.follower, paths.pathMap.get("RED_aPICKUP_SHOOT")),
 
                         new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand())
                 )
@@ -69,6 +69,12 @@ public class FirstCommandAuto extends CommandOpMode {
 
     @Override
     public void run() {
+        telemetry.addData("X Pedro: ", robot.follower.getPose().getX());
+        telemetry.addData("Y Pedro: ", robot.follower.getPose().getY());
+        telemetry.addData("X OTOS: ", robot.otos.getPosition().x);
+        telemetry.addData("Y OTOS: ", robot.otos.getPosition().y);
+        telemetry.update();
+
         super.run();
     }
 

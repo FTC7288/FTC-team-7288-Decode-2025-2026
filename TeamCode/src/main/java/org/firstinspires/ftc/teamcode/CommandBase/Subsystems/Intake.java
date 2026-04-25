@@ -11,8 +11,16 @@ import Util.Range;
 public class Intake extends SubsystemBase {
    Robot robot = Robot.getInstance();
 
-    public Constants.IntakeSubsystem.INTAKE_POSITIONS intakePositionSelector = Constants.IntakeSubsystem.INTAKE_POSITIONS.NEUTRAL;
-    public Constants.IntakeSubsystem.INTAKE_POSITIONS previousIntakePosition = null;
+    public Constants.IntakeSubsystem.INTAKE_POSITIONS intakePositionSelector;
+    private boolean pullIntakeIn = false;
+
+    public Intake () {
+        intakePositionSelector = Constants.IntakeSubsystem.INTAKE_POSITIONS.NEUTRAL;
+    }
+
+    public void outtakeIntakePosition (boolean state) {
+        pullIntakeIn = state;
+    }
 
     public double getIntakePosition() {
         return robot.intakeAnalog.getVoltage();
@@ -74,7 +82,11 @@ public class Intake extends SubsystemBase {
 
         switch (intakePositionSelector ) {
             case OUTTAKE:
-                setIntakeIntake();
+                if (pullIntakeIn) {
+                    setIntakeNeutral();
+                } else {
+                    setIntakeIntake();
+                }
                 startOuttake();
                 break;
             case INTAKE:

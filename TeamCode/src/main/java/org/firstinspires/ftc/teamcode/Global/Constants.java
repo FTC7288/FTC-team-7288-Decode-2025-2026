@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Global;
 
 
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.pedropathing.control.KalmanFilter;
+import com.pedropathing.control.KalmanFilterParameters;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PredictiveBrakingCoefficients;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
@@ -41,12 +43,14 @@ public class Constants {
         public final static int LIMELIGHT_POLLING_HZ = 100;
         public static final double FLYWHEEL_ENCODER_TOLERANCE = 20;
         public static final double METERS_TO_INCH_CONVERT_FACTOR = 39.37;
-        public static final boolean AUTO = false;
+        public static double OFFSET_ANGLE;
+        public static boolean AUTO = false;
 
+    }
 
-        // TODO: Add file reading to give the initial pose from auto or see if using a static non final variable works better
-
-
+    public final static class DriveSubsystem {
+        // TODO: Add the right parameters for the kalman filter
+        public static KalmanFilter poseFilter = new KalmanFilter(new KalmanFilterParameters(0.4,0.4));
     }
 
 
@@ -59,7 +63,7 @@ public class Constants {
         public final static double INTAKE_POSITION = 0.7;
         public final static double NEUTRAL_POSITION = 0.5;
 
-        public final static double INTAKE_ANALOG_IN = 2;
+        public final static double INTAKE_ANALOG_IN = 2.05;
 
         public enum INTAKE_POSITIONS {
             OUTTAKE,
@@ -72,7 +76,7 @@ public class Constants {
 
     public final static class TurretSubsystem {
         public static final double TICK_CONSTANT = 2.57;
-        public static PIDFController turretPIDFController = new PIDFController(0.004,0,0.0009,0);
+        public static PIDFController turretPIDFController = new PIDFController(0.02,0,0.0008,0.0016);
         public enum TurretPositionSelector {
             TURRET_OFF,
             TURRET_ON
@@ -82,7 +86,7 @@ public class Constants {
 
     public final static class FlywheelSubsystem {
 
-        public static PIDFController flywheelPIDFCOntroller = new PIDFController(0.004,0,0,0.00051);
+        public static PIDFController flywheelPIDFCOntroller = new PIDFController(0.014,0,0,0.00051);
         public enum FlywheelSpeedSelector {
             FLYWHEEL_OFF,
             FLYWHEEL_ON
@@ -91,14 +95,14 @@ public class Constants {
 
 
     public final static class IndexerSubsystem {
-        public final static double LAUNCH_POSITION = 0.23;
-        public final static double FIRST_POSITION = 0.32;
-        public final static double SECOND_POSITION = 0.52;
-        public final static double THIRD_POSITION = 0.71;
+        public final static double LAUNCH_POSITION = 0.09;
+        public final static double FIRST_POSITION = 0.2;
+        public final static double SECOND_POSITION = 0.49;
+        public final static double THIRD_POSITION = 0.78;
 
-        public static final double FIRST_ANALOG_POSITION = 1.28;
-        public static final double SECOND_ANALOG_POSITION = 1.85;
-        public static final double THIRD_ANALOG_POSITION = 2.38;
+        public static final double FIRST_ANALOG_POSITION = 0.96;
+        public static final double SECOND_ANALOG_POSITION = 1.8;
+        public static final double THIRD_ANALOG_POSITION = 2.59;
 
         public enum IndexerPositionSelector {
             LAUNCH,
@@ -167,32 +171,6 @@ public class Constants {
     }
 
 
-    public static final class PathNames {
-        //Red Front
-        public final static String RED_START_SHOOT_FRONT = "RED_START_SHOOT_FRONT";
-        public final static String RED_SHOOT_sPICKUP_ONE_FRONT = "RED_SHOOT_sPICKUP_ONE_FRONT";
-        public final static String RED_sPICKUP_ePICKUP_ONE_FRONT = "RED_sPICKUP_ePICKUP_ONE_FRONT";
-        public final static String RED_ePICKUP_SHOOT_ONE_FRONT = "RED_ePICKUP_SHOOT_ONE_FRONT";
-        public final static String RED_SHOOT_sPICKUP_TWO_FRONT = "RED_SHOOT_sPICKUP_TWO_FRONT";
-        public final static String RED_sPICKUP_ePICKUP_TWO_FRONT = "RED_sPICKUP_ePICKUP_TWO_FRONT";
-        public final static String RED_ePICKUP_SHOOT_TWO_FRONT = "RED_ePICKUP_SHOOT_TWO_FRONT";
-        public final static String RED_MOVE_OFF_FRONT = "BLUE_MOVE_OFF_FRONT";
-
-        //Red Back
-
-        //Blue Front
-        public final static String BLUE_START_SHOOT_FRONT = "RED_START_SHOOT_FRONT";
-        public final static String BLUE_SHOOT_sPICKUP_ONE_FRONT = "RED_SHOOT_sPICKUP_ONE_FRONT";
-        public final static String BLUE_sPICKUP_ePICKUP_ONE_FRONT = "RED_sPICKUP_ePICKUP_ONE_FRONT";
-        public final static String BLUE_ePICKUP_SHOOT_ONE_FRONT = "RED_ePICKUP_SHOOT_ONE_FRONT";
-        public final static String BLUE_SHOOT_sPICKUP_TWO_FRONT = "RED_SHOOT_sPICKUP_TWO_FRONT";
-        public final static String BLUE_sPICKUP_ePICKUP_TWO_FRONT = "RED_sPICKUP_ePICKUP_TWO_FRONT";
-        public final static String BLUE_ePICKUP_SHOOT_TWO_FRONT = "RED_ePICKUP_SHOOT_TWO_FRONT";
-        public final static String BLUE_MOVE_OFF_FRONT = "BLUE_MOVE_OFF_FRONT";
-
-        //Blue Back
-
-    }
 
 
 

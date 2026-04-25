@@ -1,28 +1,16 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-
-import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.ParallelRaceGroup;
-import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.paths.PathChain;
-import com.pedropathing.telemetry.SelectScope;
 import com.pedropathing.telemetry.SelectableOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.FollowPath;
-import org.firstinspires.ftc.teamcode.CommandBase.Commands.InitializeAutoCommand;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.IntakingCommand;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.LaunchCommand;
 import org.firstinspires.ftc.teamcode.CommandBase.Commands.OuttakeCommand;
@@ -33,39 +21,34 @@ import org.firstinspires.ftc.teamcode.Global.Paths;
 import org.firstinspires.ftc.teamcode.Global.Poses;
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 import Util.SelectableCommandOpMode;
-import kotlin.OverloadResolutionByLambdaReturnType;
 
 // TODO: Finish adding in the needed thingamajigs for the selectable thingamajig (im so pro at naming)
-@Autonomous(name = "RED", group = "RED")
-public class RedAutos extends SelectableOpMode {
-    public RedAutos() {
+@Autonomous(name = "BLUE", group = "BLUE")
+public class BlueAutos extends SelectableOpMode {
+    public BlueAutos() {
         super("Select an Opmode: ", main -> {
             main.folder("Front: ", sub -> {
-                sub.add("Front Six ", RedFrontSixBall::new);
-                sub.add("Front Nine No Open ", RedFrontNineBall::new);
-                sub.add("Front Nine One Open ", RedFrontNineOneOpen::new);
+                sub.add("Front Six ", BlueFrontSixBall::new);
+                sub.add("Front Nine No Open ", BlueFrontNineBall::new);
+                sub.add("Front Nine One Open ", BlueFrontNineOneOpen::new);
             });
             main.folder("Back: ", sub -> {
-                sub.add("Back Nine Corner Cycle ", RedBackNineBallCycle::new);
-                sub.add("Back Nine First Row ", RedBackNineBallRow::new);
+                sub.add("Back Nine Corner Cycle ", BlueBackNineBallCycle::new);
+                sub.add("Back Nine First Row ", BlueBackNineBallRow::new);
             });
         });
     }
 
 }
 
-    class RedFrontSixBall extends SelectableCommandOpMode {
+    class BlueFrontSixBall extends SelectableCommandOpMode {
         Robot robot = Robot.getInstance();
         Paths paths = new Paths();
         @Override
         public void initialize() {
             Constants.HardwareInitialization.AUTO = true;
-            Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
+            Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.BLUE_TEAM;
             Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, 0,0, AngleUnit.RADIANS, Math.toRadians(45));
             Constants.HardwareInitialization.OFFSET_ANGLE = 0;
 
@@ -73,7 +56,7 @@ public class RedAutos extends SelectableOpMode {
             super.reset();
 
             robot.init(hardwareMap);
-            robot.setStartingPos(Poses.RED_FRONT_START_POSE);
+            robot.setStartingPos(Poses.BLUE_FRONT_START_POSE);
 
 
             paths.generatePaths(robot.follower);
@@ -85,21 +68,21 @@ public class RedAutos extends SelectableOpMode {
                     new InstantCommand(() -> robot.flywheel.turnFlywheelOn(), robot.flywheel),
 
                     new SequentialCommandGroup(
-                            new FollowPath(robot.follower, paths.RED_START_SHOOT_FRONT, false),
+                            new FollowPath(robot.follower, paths.BLUE_START_SHOOT_FRONT, false),
 
                             new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
                             new IntakingCommand(),
-                            new FollowPath(robot.follower, paths.RED_SHOOT_sPICKUP_ONE_FRONT),
-                            new FollowPath(robot.follower, paths.RED_sPICKUP_ePICKUP_ONE_FRONT, 0.5, true),
+                            new FollowPath(robot.follower, paths.BLUE_SHOOT_sPICKUP_ONE_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_sPICKUP_ePICKUP_ONE_FRONT, 0.5, true),
                             new WaitCommand(200),
 
                             new OuttakeCommand(true),
-                            new FollowPath(robot.follower, paths.RED_ePICKUP_SHOOT_ONE_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_ePICKUP_SHOOT_ONE_FRONT),
 
                             new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
-                            new FollowPath(robot.follower, paths.RED_MOVE_OFF_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_MOVE_OFF_FRONT),
 
                             new TurnOffRobotCommand()
                     )
@@ -134,22 +117,22 @@ public class RedAutos extends SelectableOpMode {
 
 
 
-    class RedFrontNineBall extends SelectableCommandOpMode {
+    class BlueFrontNineBall extends SelectableCommandOpMode {
         Robot robot = Robot.getInstance();
         Paths paths = new Paths();
 
         @Override
         public void initialize() {
             Constants.HardwareInitialization.AUTO = true;
-            Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
-            Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.RED_FRONT_START_POSE.getX(),Poses.RED_FRONT_START_POSE.getY(), AngleUnit.RADIANS, Math.toRadians(Poses.RED_FRONT_START_POSE.getHeading()));
+            Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.BLUE_TEAM;
+            Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.BLUE_FRONT_START_POSE.getX(),Poses.BLUE_FRONT_START_POSE.getY(), AngleUnit.RADIANS, Math.toRadians(Poses.BLUE_FRONT_START_POSE.getHeading()));
             Constants.HardwareInitialization.OFFSET_ANGLE = 0;
 
 
             super.reset();
 
             robot.init(hardwareMap);
-            robot.setStartingPos(Poses.RED_FRONT_START_POSE);
+            robot.setStartingPos(Poses.BLUE_FRONT_START_POSE);
 
 
             paths.generatePaths(robot.follower);
@@ -161,34 +144,34 @@ public class RedAutos extends SelectableOpMode {
                     new InstantCommand(() -> robot.flywheel.turnFlywheelOn(), robot.flywheel),
 
                     new SequentialCommandGroup(
-                            new FollowPath(robot.follower, paths.RED_START_SHOOT_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_START_SHOOT_FRONT),
 
                             new ParallelDeadlineGroup(new WaitCommand(1500), new LaunchCommand()),
 
                             new IntakingCommand(),
-                            new FollowPath(robot.follower, paths.RED_SHOOT_sPICKUP_ONE_FRONT),
-                            new FollowPath(robot.follower, paths.RED_sPICKUP_ePICKUP_ONE_FRONT, 0.5, true),
+                            new FollowPath(robot.follower, paths.BLUE_SHOOT_sPICKUP_ONE_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_sPICKUP_ePICKUP_ONE_FRONT, 0.5, true),
                             new WaitCommand(200),
 
 
                             new OuttakeCommand(true),
-                            new FollowPath(robot.follower, paths.RED_ePICKUP_SHOOT_ONE_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_ePICKUP_SHOOT_ONE_FRONT),
 
 
                             new ParallelDeadlineGroup(new WaitCommand(1500), new LaunchCommand()),
 
                             new IntakingCommand(),
-                            new FollowPath(robot.follower, paths.RED_SHOOT_sPICKUP_TWO_FRONT),
-                            new FollowPath(robot.follower, paths.RED_sPICKUP_ePICKUP_TWO_FRONT, 0.5, true),
+                            new FollowPath(robot.follower, paths.BLUE_SHOOT_sPICKUP_TWO_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_sPICKUP_ePICKUP_TWO_FRONT, 0.5, true),
                             new WaitCommand(200),
 
 
                             new OuttakeCommand(true),
-                            new FollowPath(robot.follower, paths.RED_ePICKUP_SHOOT_TWO_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_ePICKUP_SHOOT_TWO_FRONT),
 
                             new ParallelDeadlineGroup(new WaitCommand(1500), new LaunchCommand()),
 
-                            new FollowPath(robot.follower, paths.RED_MOVE_OFF_FRONT),
+                            new FollowPath(robot.follower, paths.BLUE_MOVE_OFF_FRONT),
 
                             new TurnOffRobotCommand()
 
@@ -210,22 +193,22 @@ public class RedAutos extends SelectableOpMode {
 
 
 
-class RedFrontNineOneOpen extends SelectableCommandOpMode {
+class BlueFrontNineOneOpen extends SelectableCommandOpMode {
     Robot robot = Robot.getInstance();
     Paths paths = new Paths();
 
     @Override
     public void initialize() {
         Constants.HardwareInitialization.AUTO = true;
-        Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
-        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.RED_FRONT_START_POSE.getX(),Poses.RED_FRONT_START_POSE.getY(), AngleUnit.RADIANS, Math.toRadians(Poses.RED_FRONT_START_POSE.getHeading()));
+        Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.BLUE_TEAM;
+        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.BLUE_FRONT_START_POSE.getX(),Poses.BLUE_FRONT_START_POSE.getY(), AngleUnit.RADIANS, Math.toRadians(Poses.BLUE_FRONT_START_POSE.getHeading()));
         Constants.HardwareInitialization.OFFSET_ANGLE = 0;
 
 
         super.reset();
 
         robot.init(hardwareMap);
-        robot.setStartingPos(Poses.RED_FRONT_START_POSE);
+        robot.setStartingPos(Poses.BLUE_FRONT_START_POSE);
 
         paths.generatePaths(robot.follower);
 
@@ -236,34 +219,34 @@ class RedFrontNineOneOpen extends SelectableCommandOpMode {
                 new InstantCommand(() -> robot.flywheel.turnFlywheelOn(), robot.flywheel),
 
                 new SequentialCommandGroup(
-                        new FollowPath(robot.follower, paths.RED_START_SHOOT_FRONT),
+                        new FollowPath(robot.follower, paths.BLUE_START_SHOOT_FRONT),
 
                         new ParallelDeadlineGroup(new WaitCommand(1500), new LaunchCommand()),
 
                         new IntakingCommand(),
-                        new FollowPath(robot.follower, paths.RED_SHOOT_sPICKUP_ONE_FRONT),
-                        new FollowPath(robot.follower, paths.RED_sPICKUP_ePICKUP_ONE_FRONT, 0.5),
+                        new FollowPath(robot.follower, paths.BLUE_SHOOT_sPICKUP_ONE_FRONT),
+                        new FollowPath(robot.follower, paths.BLUE_sPICKUP_ePICKUP_ONE_FRONT, 0.5),
                         new WaitCommand(200),
 
                         new InstantCommand(() -> robot.intake.setIntakeStateNeutral()),
-                        new FollowPath(robot.follower, paths.RED_DUMP_FRONT, 0.5),
+                        new FollowPath(robot.follower, paths.BLUE_DUMP_FRONT, 0.5),
 
                         new OuttakeCommand(false),
-                        new FollowPath(robot.follower, paths.RED_DUMP_SHOOT_FRONT),
+                        new FollowPath(robot.follower, paths.BLUE_DUMP_SHOOT_FRONT),
 
                         new ParallelDeadlineGroup(new WaitCommand(1500), new LaunchCommand()),
 
                         new IntakingCommand(),
-                        new FollowPath(robot.follower, paths.RED_SHOOT_sPICKUP_TWO_FRONT),
-                        new FollowPath(robot.follower, paths.RED_sPICKUP_ePICKUP_TWO_FRONT, 0.5),
+                        new FollowPath(robot.follower, paths.BLUE_SHOOT_sPICKUP_TWO_FRONT),
+                        new FollowPath(robot.follower, paths.BLUE_sPICKUP_ePICKUP_TWO_FRONT, 0.5),
                         new WaitCommand(200),
 
                         new OuttakeCommand(true),
-                        new FollowPath(robot.follower, paths.RED_ePICKUP_SHOOT_TWO_FRONT),
+                        new FollowPath(robot.follower, paths.BLUE_ePICKUP_SHOOT_TWO_FRONT),
 
                         new ParallelDeadlineGroup(new WaitCommand(1500), new LaunchCommand()),
 
-                        new FollowPath(robot.follower, paths.RED_MOVE_OFF_FRONT),
+                        new FollowPath(robot.follower, paths.BLUE_MOVE_OFF_FRONT),
 
                         new TurnOffRobotCommand()
 
@@ -291,22 +274,22 @@ class RedFrontNineOneOpen extends SelectableCommandOpMode {
 
 
 
-class RedBackNineBallCycle extends SelectableCommandOpMode {
+class BlueBackNineBallCycle extends SelectableCommandOpMode {
     Robot robot = Robot.getInstance();
     Paths paths = new Paths();
 
     @Override
     public void initialize() {
         Constants.HardwareInitialization.AUTO = true;
-        Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
-        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.RED_BACK_START_POSE.getX(),Poses.RED_BACK_START_POSE.getY(), AngleUnit.RADIANS, Math.toRadians(Poses.RED_BACK_START_POSE.getHeading()));
+        Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.BLUE_TEAM;
+        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.BLUE_BACK_START_POSE.getX(),Poses.BLUE_BACK_START_POSE.getY(), AngleUnit.RADIANS, Math.toRadians(Poses.BLUE_BACK_START_POSE.getHeading()));
         Constants.HardwareInitialization.OFFSET_ANGLE = 68;
 
 
         super.reset();
 
         robot.init(hardwareMap);
-        robot.setStartingPos(Poses.RED_FRONT_START_POSE);
+        robot.setStartingPos(Poses.BLUE_FRONT_START_POSE);
 
         paths.generatePaths(robot.follower);
 
@@ -322,26 +305,26 @@ class RedBackNineBallCycle extends SelectableCommandOpMode {
                         new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
                         new IntakingCommand(),
-                        new FollowPath(robot.follower, paths.RED_SHOOT_PICKUP_CORNER_BACK),
-                        new FollowPath(robot.follower, paths.RED_PICKUP_CORNER_SHOOT_BACK),
+                        new FollowPath(robot.follower, paths.BLUE_SHOOT_PICKUP_CORNER_BACK),
+                        new FollowPath(robot.follower, paths.BLUE_PICKUP_CORNER_SHOOT_BACK),
 
 
                         new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
                         new IntakingCommand(),
-                        new FollowPath(robot.follower, paths.RED_SHOOT_PICKUP_CORNER_BACK),
-                        new FollowPath(robot.follower, paths.RED_PICKUP_CORNER_SHOOT_BACK),
+                        new FollowPath(robot.follower, paths.BLUE_SHOOT_PICKUP_CORNER_BACK),
+                        new FollowPath(robot.follower, paths.BLUE_PICKUP_CORNER_SHOOT_BACK),
 
                         new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
                         new IntakingCommand(),
-                        new FollowPath(robot.follower, paths.RED_SHOOT_PICKUP_CURVE_CORNER_BACK),
-                        new FollowPath(robot.follower, paths.RED_PICKUP_CURVE_CORNER_SHOOT_BACK),
+                        new FollowPath(robot.follower, paths.BLUE_SHOOT_PICKUP_CURVE_CORNER_BACK),
+                        new FollowPath(robot.follower, paths.BLUE_PICKUP_CURVE_CORNER_SHOOT_BACK),
 
 
                         new ParallelDeadlineGroup(new WaitCommand(2000), new LaunchCommand()),
 
-                        new FollowPath(robot.follower, paths.RED_MOVE_OFF_BACK),
+                        new FollowPath(robot.follower, paths.BLUE_MOVE_OFF_BACK),
 
                         new TurnOffRobotCommand()
 
@@ -367,7 +350,7 @@ class RedBackNineBallCycle extends SelectableCommandOpMode {
 
 
 
-class RedBackNineBallRow extends SelectableCommandOpMode {
+class BlueBackNineBallRow extends SelectableCommandOpMode {
     Robot robot = Robot.getInstance();
     Paths paths = new Paths();
 
@@ -376,13 +359,13 @@ class RedBackNineBallRow extends SelectableCommandOpMode {
         super.reset();
 
         Constants.HardwareInitialization.AUTO = true;
-        Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.RED_TEAM;
-        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.RED_BACK_START_POSE.getX() ,Poses.RED_BACK_START_POSE.getY(), AngleUnit.DEGREES, Math.toRadians(Poses.RED_BACK_START_POSE.getHeading()));
+        Constants.AllianceSelection.SELECTED_TEAM = Constants.AllianceSelection.BLUE_TEAM;
+        Constants.HardwareInitialization.INITIAL_ROBOT_POSE = new Pose2D(DistanceUnit.INCH, Poses.BLUE_BACK_START_POSE.getX() ,Poses.BLUE_BACK_START_POSE.getY(), AngleUnit.DEGREES, Math.toRadians(Poses.BLUE_BACK_START_POSE.getHeading()));
         Constants.HardwareInitialization.OFFSET_ANGLE = 68;
 
 
         robot.init(hardwareMap);
-        robot.setStartingPos(Poses.RED_BACK_START_POSE);
+        robot.setStartingPos(Poses.BLUE_BACK_START_POSE);
 
         robot.flywheelEncoder.reset();
         robot.turretEncoder.reset();
@@ -408,9 +391,9 @@ class RedBackNineBallRow extends SelectableCommandOpMode {
 
                     new IntakingCommand(),
 
-                    new FollowPath(robot.follower, paths.RED_START_LINE_PICKUP_ONE_BACK),
-                    new FollowPath(robot.follower, paths.RED_sPICKUP_ePICKUP_LINE_ONE_BACK),
-                    new FollowPath(robot.follower, paths.RED_ePICKUP_SHOOT_LINE_ONE_BACK),
+                    new FollowPath(robot.follower, paths.BLUE_START_LINE_PICKUP_ONE_BACK),
+                    new FollowPath(robot.follower, paths.BLUE_sPICKUP_ePICKUP_LINE_ONE_BACK),
+                    new FollowPath(robot.follower, paths.BLUE_ePICKUP_SHOOT_LINE_ONE_BACK),
 
                     new InstantCommand(() -> robot.intake.setIntakeStateOuttake()),
 
@@ -421,8 +404,8 @@ class RedBackNineBallRow extends SelectableCommandOpMode {
 
                     new IntakingCommand(),
 
-                    new FollowPath(robot.follower, paths.RED_SHOOT_PICKUP_CORNER_BACK),
-                    new FollowPath(robot.follower, paths.RED_PICKUP_CORNER_SHOOT_BACK),
+                    new FollowPath(robot.follower, paths.BLUE_SHOOT_PICKUP_CORNER_BACK),
+                    new FollowPath(robot.follower, paths.BLUE_PICKUP_CORNER_SHOOT_BACK),
 
 
                     new InstantCommand(() -> robot.intake.setIntakeStateOuttake()),
@@ -437,8 +420,8 @@ class RedBackNineBallRow extends SelectableCommandOpMode {
                     new IntakingCommand(),
 
 
-                    new FollowPath(robot.follower, paths.RED_SHOOT_PICKUP_CURVE_CORNER_BACK, false),
-                    new FollowPath(robot.follower, paths.RED_PICKUP_CURVE_CORNER_SHOOT_BACK),
+                    new FollowPath(robot.follower, paths.BLUE_SHOOT_PICKUP_CURVE_CORNER_BACK, false),
+                    new FollowPath(robot.follower, paths.BLUE_PICKUP_CURVE_CORNER_SHOOT_BACK),
 
                     new InstantCommand(() -> robot.intake.setIntakeStateOuttake()),
 
@@ -447,7 +430,7 @@ class RedBackNineBallRow extends SelectableCommandOpMode {
                         new LaunchCommand()
                     ),
 
-                    new FollowPath(robot.follower, paths.RED_MOVE_OFF_BACK),
+                    new FollowPath(robot.follower, paths.BLUE_MOVE_OFF_BACK),
 
 
                     new TurnOffRobotCommand()

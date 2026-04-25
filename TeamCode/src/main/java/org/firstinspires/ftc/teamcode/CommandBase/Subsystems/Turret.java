@@ -4,6 +4,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Global.Constants;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDFController;
 
 import org.ejml.simple.SimpleMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -12,12 +13,17 @@ import org.firstinspires.ftc.teamcode.Global.Robot;
 
 public class Turret extends SubsystemBase {
     Robot robot = Robot.getInstance();
+
     private Constants.TurretSubsystem.TurretPositionSelector turretState = Constants.TurretSubsystem.TurretPositionSelector.TURRET_OFF;
     public SimpleMatrix initialPosVector = new SimpleMatrix(2,1);
     public SimpleMatrix currentPosVector = new SimpleMatrix(2,1);
-    private Pose2D TEAM_GOAL_POSE;
+    public Pose2D TEAM_GOAL_POSE;
     public double desiredAngle;
+    public double rotationalAngle;
+    public double wantedAngle;
     public double translationalAngle;
+
+    double multiplier;
 
     public Turret() {
         if (Constants.AllianceSelection.SELECTED_TEAM.equals(Constants.AllianceSelection.RED_TEAM)) {
@@ -50,22 +56,24 @@ public class Turret extends SubsystemBase {
         currentPosVector.set(0,0, TEAM_GOAL_POSE.getX(DistanceUnit.INCH)-currentPose.getX(DistanceUnit.INCH));
         currentPosVector.set(1,0, TEAM_GOAL_POSE.getY(DistanceUnit.INCH)-currentPose.getY(DistanceUnit.INCH));
 
-        translationalAngle = Math.acos(initialPosVector.dot(currentPosVector) / (currentPosVector.normF() * initialPosVector.normF()));
 
-        double multiplier;
         if (currentPose.getX(DistanceUnit.INCH) - Constants.HardwareInitialization.INITIAL_ROBOT_POSE.getX(DistanceUnit.INCH) < 0) {
-            multiplier = 1;
-        } else {
             multiplier = -1;
+        } else {
+            multiplier = 1;
         }
 
-        desiredAngle = Constants.TurretSubsystem.TICK_CONSTANT * ((Math.toDegrees(translationalAngle) * multiplier) - Math.toDegrees(robot.drive.getIMUOrientation()));
-        return Constants.TurretSubsystem.turretPIDFController.calculate(robot.turretEncoder.getPosition(), desiredAngle);
+        translationalAngle = Math.acos(initialPosVector.dot(currentPosVector) / (currentPosVector.normF() * initialPosVector.normF())) * multiplier;
+        rotationalAngle = robot.drive.getIMUOrientation();
+
+        wantedAngle = Math.toDegrees(translationalAngle - rotationalAngle);
+        desiredAngle = Constants.TurretSubsystem.TICK_CONSTANT * (wantedAngle + Constants.HardwareInitialization.OFFSET_ANGLE);
+        return Constants.TurretSubsystem.turretPIDFController.calculate(robot.turretEncoder.getPosition(), (int) desiredAngle);
     }
 
     @Override
     public void periodic() {
-        double turretPosition = calculateTurretPosition((Constants.HardwareInitialization.AUTO) ? new Pose2D(DistanceUnit.INCH, robot.follower.getPose().getX(),robot.follower.getPose().getY(), AngleUnit.RADIANS, robot.follower.getPose().getHeading()) : robot.drive.getRobotPose());
+        double turretPosition = calculateTurretPosition((Constants.HardwareInitialization.AUTO) ? new Pose2D(DistanceUnit.INCH, robot.follower.getPose().getX(),robot.follower.getPose().getY(), AngleUnit.RADIANS, robot.follower.getHeading()) : robot.drive.getRobotPose());
         switch (turretState) {
             case TURRET_OFF:
                 setTurretPower(0);

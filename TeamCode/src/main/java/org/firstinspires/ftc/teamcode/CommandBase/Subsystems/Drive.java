@@ -84,5 +84,9 @@ public class Drive extends SubsystemBase {
         return new Pose2D(DistanceUnit.INCH, otosPose.x, otosPose.y, AngleUnit.RADIANS, otosPose.h);
     }
 
+    @Override
+    public void periodic() {
+        updateIMUOrientation();
+    }
 
 }

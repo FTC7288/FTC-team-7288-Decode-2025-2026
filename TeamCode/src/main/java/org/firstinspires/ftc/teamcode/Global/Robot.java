@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -163,9 +164,19 @@ public class Robot {
 
 //        follower = org.firstinspires.ftc.teamcode.pedroPathing.Constants.createFollower(hardwareMap);
 
+        if (Constants.HardwareInitialization.AUTO) {
+            turretEncoder.reset();
+            flywheelEncoder.reset();
+        }
+
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
     }
+
+    public void setStartingPos(Pose startingPose) {
+        follower.setStartingPose(startingPose);
+    }
+
 
 
     private BNO055IMU.Parameters initializeIMUParameters () {
@@ -176,5 +187,7 @@ public class Robot {
 
         return parameters;
     }
+
+
 
 }

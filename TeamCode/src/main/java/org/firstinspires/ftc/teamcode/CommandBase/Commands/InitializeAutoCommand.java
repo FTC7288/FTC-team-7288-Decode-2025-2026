@@ -13,9 +13,9 @@ public class InitializeAutoCommand extends CommandBase {
     @Override
     public void initialize() {
         new ParallelCommandGroup(
-                new InstantCommand(() -> robot.flywheel.turnFlywheelOn()),
-                new InstantCommand(() -> robot.indexer.indexerPositionSelector = Constants.IndexerSubsystem.IndexerPositionSelector.THIRD),
-                new InstantCommand(() -> robot.intake.setIntakeStateNeutral()));
+                new InstantCommand(() -> robot.flywheel.turnFlywheelOn(), robot.flywheel),
+                new InstantCommand(() -> robot.indexer.indexerPositionSelector = Constants.IndexerSubsystem.IndexerPositionSelector.THIRD,robot.indexer),
+                new InstantCommand(() -> robot.intake.setIntakeStateNeutral(),robot.intake));
     }
 
     @Override

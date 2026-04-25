@@ -4,20 +4,19 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.Global.Robot;
 
-public class LaunchCommand extends CommandBase {
+public class UpdateFollower extends CommandBase {
     Robot robot = Robot.getInstance();
 
-
     @Override
-    public void initialize() {
-        robot.intake.setIntakeStateTransfer();
-        robot.indexer.interruptForLaunch(true);
+    public void execute() {
+        robot.follower.update();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
-}
 
+
+}
